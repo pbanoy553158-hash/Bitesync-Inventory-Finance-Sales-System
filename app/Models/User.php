@@ -15,12 +15,30 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'profile_photo_path',
+        'theme',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    /**
+     * Keep role checks consistent when older records use different casing
+     * or include formatting such as square brackets.
+     */
+    public function getRoleAttribute(?string $value): ?string
+    {
+        $normalized = strtoupper(trim((string) $value, " \t\n\r\0\x0B[]"));
+
+        return match ($normalized) {
+            'CEO/ADMIN', 'ADMIN' => 'CEO/Admin',
+            'FINANCE' => 'Finance',
+            'PROCUREMENT' => 'Procurement',
+            default => $value,
+        };
+    }
 
     protected function casts(): array
     {

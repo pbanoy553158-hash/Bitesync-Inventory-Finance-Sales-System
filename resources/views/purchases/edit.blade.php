@@ -1487,7 +1487,7 @@ document.addEventListener('DOMContentLoaded', function () {
     | INVENTORY OPTIONS
     |--------------------------------------------------------------------------
     |
-    | Instead of @json(), create the option HTML directly from Blade.
+    | Create the option HTML directly from Blade instead of encoding it as JSON.
     | This avoids the Blade/PHP parser problem encountered previously.
     |
     */

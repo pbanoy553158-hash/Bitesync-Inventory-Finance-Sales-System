@@ -1990,28 +1990,10 @@
             <nav class="nav">
 
 
-                <!-- USER MANAGEMENT -->
-
-                <a
-                    href="#"
-                    class="nav-item"
-                >
-
-                    <span class="nav-icon">
-                        ♙
-                    </span>
-
-                    <span>
-                        User Management
-                    </span>
-
-                </a>
-
-
                 <!-- SYSTEM SETTINGS -->
 
                 <a
-                    href="#"
+                    href="{{ route('settings.edit') }}"
                     class="nav-item"
                 >
 
@@ -2025,23 +2007,6 @@
 
                 </a>
 
-
-                <!-- AUDIT LOGS -->
-
-                <a
-                    href="#"
-                    class="nav-item"
-                >
-
-                    <span class="nav-icon">
-                        ◷
-                    </span>
-
-                    <span>
-                        Audit Logs
-                    </span>
-
-                </a>
 
             </nav>
 

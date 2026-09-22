@@ -806,6 +806,58 @@ label {
     color: var(--text);
 }
 
+/* Shared cards used by role workspaces and settings. */
+.content-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 8px 24px rgba(50, 32, 20, .04);
+}
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+.purchase-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+.purchase-stat {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+.purchase-stat-label { color: var(--muted); font-size: .72rem; font-weight: 800; letter-spacing: .06em; }
+.purchase-stat-value { margin: 7px 0 3px; font-size: 1.7rem; font-weight: 800; }
+.purchase-stat-note { color: var(--muted); font-size: .8rem; }
+.purchase-stat-icon { color: var(--orange); font-size: 1.35rem; }
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { padding: 13px 10px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+.data-table th { color: var(--muted); font-size: .75rem; letter-spacing: .04em; text-transform: uppercase; }
+.avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+body.theme-dark {
+    --bg: #1d1713;
+    --card: #2b211b;
+    --card-soft: #35281f;
+    --text: #f5eee8;
+    --muted: #b9aaa0;
+    --border: #4b392e;
+    --orange-light: #53351f;
+    --green-light: #21382a;
+    --red-light: #482523;
+}
+body.theme-dark .sidebar { box-shadow: 5px 0 22px rgba(0, 0, 0, .22); }
+body.theme-dark .settings-form input, body.theme-dark .settings-form select { color: var(--text); }
+
 
 /* =========================================================
    RESPONSIVE — 850px
@@ -963,7 +1015,7 @@ label {
 </head>
 
 
-<body>
+<body class="{{ auth()->user()->theme === 'dark' ? 'theme-dark' : '' }}">
 
 <div class="app">
 
@@ -1011,8 +1063,8 @@ label {
             <!-- DASHBOARD -->
 
             <a
-                href="{{ route('admin.dashboard') }}"
-                class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                href="{{ auth()->user()->isProcurement() ? route('procurement.dashboard') : (auth()->user()->isFinance() ? route('finance.dashboard') : route('admin.dashboard')) }}"
+                class="nav-item {{ request()->routeIs('admin.dashboard', 'finance.dashboard', 'procurement.dashboard') ? 'active' : '' }}"
             >
 
                 <span class="nav-icon">
@@ -1098,58 +1150,55 @@ label {
             </a>
 
 
-            <!-- SALES -->
+            @unless (auth()->user()->isProcurement())
+                <!-- SALES -->
 
-            <a
-                href="{{ route('sales.index') }}"
-                class="nav-item {{ request()->routeIs('sales.*') ? 'active' : '' }}"
-            >
+                <a
+                    href="{{ route('sales.index') }}"
+                    class="nav-item {{ request()->routeIs('sales.*') ? 'active' : '' }}"
+                >
 
-                <span class="nav-icon">
-                    ₱
-                </span>
+                    <span class="nav-icon">
+                        ₱
+                    </span>
 
-                <span>
-                    Sales
-                </span>
+                    <span>
+                        Sales
+                    </span>
 
-            </a>
+                </a>
 
 
-            <!-- EXPENSES -->
+                <!-- EXPENSES -->
 
-            <a
-                href="#"
-                class="nav-item"
-            >
+                <a
+                    href="#"
+                    class="nav-item"
+                >
 
-                <span class="nav-icon">
-                    ▣
-                </span>
+                    <span class="nav-icon">
+                        ▣
+                    </span>
 
-                <span>
-                    Expenses
-                </span>
+                    <span>
+                        Expenses
+                    </span>
 
-            </a>
+                </a>
+            @endunless
 
 
             <!-- REPORTS -->
 
-            <a
-                href="#"
-                class="nav-item"
-            >
-
-                <span class="nav-icon">
-                    ▥
-                </span>
-
-                <span>
-                    Reports
-                </span>
-
-            </a>
+            @if (auth()->user()->isProcurement())
+                <a
+                    href="{{ route('procurement.reports') }}"
+                    class="nav-item {{ request()->routeIs('procurement.reports') ? 'active' : '' }}"
+                >
+                    <span class="nav-icon">▥</span>
+                    <span>Reports</span>
+                </a>
+            @endif
 
         </nav>
 
@@ -1158,32 +1207,14 @@ label {
 
         <div class="admin-section">
 
-            <div class="nav-title">
-                Administration
-            </div>
+            <div class="nav-title">Account</div>
 
 
             <nav class="nav">
 
                 <a
-                    href="#"
-                    class="nav-item"
-                >
-
-                    <span class="nav-icon">
-                        ♙
-                    </span>
-
-                    <span>
-                        User Management
-                    </span>
-
-                </a>
-
-
-                <a
-                    href="#"
-                    class="nav-item"
+                    href="{{ route('settings.edit') }}"
+                    class="nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}"
                 >
 
                     <span class="nav-icon">
@@ -1192,22 +1223,6 @@ label {
 
                     <span>
                         System Settings
-                    </span>
-
-                </a>
-
-
-                <a
-                    href="#"
-                    class="nav-item"
-                >
-
-                    <span class="nav-icon">
-                        ◷
-                    </span>
-
-                    <span>
-                        Audit Logs
                     </span>
 
                 </a>
@@ -1224,8 +1239,14 @@ label {
             <div class="user-mini">
 
                 <div class="avatar">
-
-                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    @if (auth()->user()->profile_photo_path)
+                        <img
+                            src="{{ asset('storage/' . auth()->user()->profile_photo_path) }}"
+                            alt="Profile picture"
+                        >
+                    @else
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    @endif
 
                 </div>
 
