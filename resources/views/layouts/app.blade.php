@@ -1200,6 +1200,31 @@ label {
 
 
     <!-- =================================================
+         CASH REMITTANCE
+         Finance ONLY
+    ================================================== -->
+
+    @if ($isFinance)
+
+        <a
+            href="{{ route('cash-remittances.index') }}"
+            class="nav-item {{ request()->routeIs('cash-remittances.*') ? 'active' : '' }}"
+        >
+
+            <span class="nav-icon">
+                ₱
+            </span>
+
+            <span>
+                Cash Remittance
+            </span>
+
+        </a>
+
+    @endif
+
+
+    <!-- =================================================
          REPORTS
          ALL THREE ROLES
     ================================================== -->

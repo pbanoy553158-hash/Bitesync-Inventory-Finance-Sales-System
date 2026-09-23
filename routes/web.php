@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CashRemittanceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
@@ -86,13 +88,22 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | FINANCE DASHBOARD
     |--------------------------------------------------------------------------
+    |
+    | Finance has its own dashboard and finance-only workspace.
+    |
+    | Blade file:
+    | resources/views/dashboard/finance.blade.php
+    |
+    | URL:
+    | /finance/dashboard
+    |
     */
 
     Route::middleware('role:Finance')->group(function () {
 
         Route::get('/finance/dashboard', [
-            DashboardController::class,
-            'finance'
+            FinanceController::class,
+            'index'
         ])->name('finance.dashboard');
 
     });
@@ -118,6 +129,16 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | INVENTORY - VIEW
     |--------------------------------------------------------------------------
+    |
+    | Finance:
+    | - Can view inventory
+    |
+    | Procurement:
+    | - Can view inventory
+    |
+    | CEO/Admin:
+    | - Can view inventory
+    |
     */
 
     Route::middleware(
@@ -136,6 +157,11 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | INVENTORY - MANAGEMENT
     |--------------------------------------------------------------------------
+    |
+    | Finance is intentionally excluded.
+    |
+    | CEO/Admin and Procurement can manage inventory.
+    |
     */
 
     Route::middleware(
@@ -204,30 +230,8 @@ Route::middleware('auth')->group(function () {
 
         /*
         |--------------------------------------------------------------------------
-        | SUPPLIER + INVENTORY ITEM PURCHASE COST
+        | Supplier + Inventory Item Purchase Cost
         |--------------------------------------------------------------------------
-        |
-        | Used by Manual Stock In.
-        |
-        | When the user selects:
-        |
-        |   Supplier
-        |   +
-        |   Inventory Item
-        |
-        | this endpoint returns the latest recorded purchase unit
-        | cost for that supplier and inventory item.
-        |
-        | Example:
-        |
-        | /inventory/supplier-item-cost
-        |     ?supplier_id=3
-        |     &inventory_item_id=12
-        |
-        | The actual lookup logic is handled by:
-        |
-        | InventoryController::supplierItemCost()
-        |
         */
 
         Route::get('/inventory/supplier-item-cost', [
@@ -238,11 +242,8 @@ Route::middleware('auth')->group(function () {
 
         /*
         |--------------------------------------------------------------------------
-        | MULTI-ITEM STOCK RECEIPT
+        | Multi-Item Stock Receipt
         |--------------------------------------------------------------------------
-        |
-        | One receipt can contain multiple inventory items.
-        |
         */
 
         Route::post('/inventory/stock-receipt', [
@@ -253,11 +254,8 @@ Route::middleware('auth')->group(function () {
 
         /*
         |--------------------------------------------------------------------------
-        | LEGACY / SINGLE-ITEM STOCK IN
+        | Legacy / Single-Item Stock In
         |--------------------------------------------------------------------------
-        |
-        | Kept for existing functionality.
-        |
         */
 
         Route::post('/inventory/{inventoryItem}/stock-in', [
@@ -294,46 +292,99 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | PRODUCTS - VIEW
+    | PURCHASE PRICE LOOKUP
     |--------------------------------------------------------------------------
+    |
+    | Used by purchase/inventory management.
+    |
+    | Finance does NOT need direct access to this endpoint.
+    |
+    | IMPORTANT:
+    | This route stays BEFORE /purchases/{purchase}.
+    |
     */
 
     Route::middleware(
-        'role:CEO/Admin,Finance,Procurement'
+        'role:CEO/Admin,Procurement'
     )->group(function () {
 
-        Route::get('/products', [
-            ProductController::class,
-            'index'
-        ])->name('products.index');
+        Route::get('/purchases/latest-cost', [
+            InventoryController::class,
+            'latestPurchaseCost'
+        ])->name('purchases.latest-cost');
 
     });
 
 
     /*
     |--------------------------------------------------------------------------
-    | PRODUCTS - MANAGEMENT
+    | PRODUCTS
     |--------------------------------------------------------------------------
+    |
+    | Products are restricted to CEO/Admin.
+    |
+    | Finance does NOT have Product access.
+    | Procurement does NOT have Product access.
+    |
     */
 
     Route::middleware(
         'role:CEO/Admin'
     )->group(function () {
 
+        /*
+        |--------------------------------------------------------------------------
+        | Product List
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/products', [
+            ProductController::class,
+            'index'
+        ])->name('products.index');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create Product
+        |--------------------------------------------------------------------------
+        */
+
         Route::get('/products/create', [
             ProductController::class,
             'create'
         ])->name('products.create');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Store Product
+        |--------------------------------------------------------------------------
+        */
 
         Route::post('/products', [
             ProductController::class,
             'store'
         ])->name('products.store');
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Edit Product
+        |--------------------------------------------------------------------------
+        */
+
         Route::get('/products/{product}/edit', [
             ProductController::class,
             'edit'
         ])->name('products.edit');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update Product
+        |--------------------------------------------------------------------------
+        */
 
         Route::put('/products/{product}', [
             ProductController::class,
@@ -347,6 +398,9 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | RECIPES
     |--------------------------------------------------------------------------
+    |
+    | CEO/Admin only.
+    |
     */
 
     Route::middleware(
@@ -404,6 +458,11 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | SUPPLIERS - MANAGEMENT
     |--------------------------------------------------------------------------
+    |
+    | Finance is VIEW ONLY.
+    |
+    | CEO/Admin and Procurement can manage suppliers.
+    |
     */
 
     Route::middleware(
@@ -524,6 +583,9 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | SUPPLIERS - VIEW
     |--------------------------------------------------------------------------
+    |
+    | Finance can view suppliers.
+    |
     */
 
     Route::middleware(
@@ -548,6 +610,11 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | PURCHASES - MANAGEMENT
     |--------------------------------------------------------------------------
+    |
+    | Finance is VIEW ONLY.
+    |
+    | CEO/Admin and Procurement manage purchases.
+    |
     */
 
     Route::middleware(
@@ -652,12 +719,8 @@ Route::middleware('auth')->group(function () {
 
         /*
         |--------------------------------------------------------------------------
-        | RECEIVE PURCHASE
+        | Receive Purchase
         |--------------------------------------------------------------------------
-        |
-        | This is the point where received quantities are added
-        | to InventoryItem.quantity.
-        |
         */
 
         Route::post('/purchases/{purchase}/receive', [
@@ -684,6 +747,9 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | PURCHASES - VIEW
     |--------------------------------------------------------------------------
+    |
+    | Finance can view purchases.
+    |
     */
 
     Route::middleware(
@@ -695,12 +761,6 @@ Route::middleware('auth')->group(function () {
             'index'
         ])->name('purchases.index');
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Purchase Details
-        |--------------------------------------------------------------------------
-        */
 
         Route::get('/purchases/{purchase}', [
             PurchaseController::class,
@@ -714,6 +774,11 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | SALES - MANAGEMENT
     |--------------------------------------------------------------------------
+    |
+    | Finance is VIEW ONLY.
+    |
+    | Only CEO/Admin can create or cancel sales.
+    |
     */
 
     Route::middleware(
@@ -744,10 +809,15 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | SALES - VIEW
     |--------------------------------------------------------------------------
+    |
+    | Finance can view sales.
+    |
+    | Procurement is intentionally excluded.
+    |
     */
 
     Route::middleware(
-        'role:CEO/Admin,Finance,Procurement'
+        'role:CEO/Admin,Finance'
     )->group(function () {
 
         Route::get('/sales', [
@@ -768,11 +838,22 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | EXPENSES - MANAGEMENT
     |--------------------------------------------------------------------------
+    |
+    | Finance can fully manage expenses.
+    |
+    | CEO/Admin can also manage expenses.
+    |
     */
 
     Route::middleware(
         'role:CEO/Admin,Finance'
     )->group(function () {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create Expense
+        |--------------------------------------------------------------------------
+        */
 
         Route::get('/expenses/create', [
             ExpenseController::class,
@@ -780,11 +861,23 @@ Route::middleware('auth')->group(function () {
         ])->name('expenses.create');
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Store Expense
+        |--------------------------------------------------------------------------
+        */
+
         Route::post('/expenses', [
             ExpenseController::class,
             'store'
         ])->name('expenses.store');
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Edit Expense
+        |--------------------------------------------------------------------------
+        */
 
         Route::get('/expenses/{expense}/edit', [
             ExpenseController::class,
@@ -792,11 +885,23 @@ Route::middleware('auth')->group(function () {
         ])->name('expenses.edit');
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Update Expense
+        |--------------------------------------------------------------------------
+        */
+
         Route::put('/expenses/{expense}', [
             ExpenseController::class,
             'update'
         ])->name('expenses.update');
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Delete Expense
+        |--------------------------------------------------------------------------
+        */
 
         Route::delete('/expenses/{expense}', [
             ExpenseController::class,
@@ -810,10 +915,13 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | EXPENSES - VIEW
     |--------------------------------------------------------------------------
+    |
+    | Finance and CEO/Admin can view expenses.
+    |
     */
 
     Route::middleware(
-        'role:CEO/Admin,Finance,Procurement'
+        'role:CEO/Admin,Finance'
     )->group(function () {
 
         Route::get('/expenses', [
@@ -832,8 +940,118 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | CASH REMITTANCE - FINANCE ONLY
+    |--------------------------------------------------------------------------
+    |
+    | Finance can:
+    |
+    | - View remittance records
+    | - Create a remittance
+    | - View a remittance
+    | - Edit a remittance
+    | - Delete a remittance
+    |
+    */
+
+    Route::middleware('role:Finance')->group(function () {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Cash Remittance List
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/cash-remittances', [
+            CashRemittanceController::class,
+            'index'
+        ])->name('cash-remittances.index');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create Cash Remittance
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/cash-remittances/create', [
+            CashRemittanceController::class,
+            'create'
+        ])->name('cash-remittances.create');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Store Cash Remittance
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/cash-remittances', [
+            CashRemittanceController::class,
+            'store'
+        ])->name('cash-remittances.store');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | View Cash Remittance
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/cash-remittances/{cashRemittance}', [
+            CashRemittanceController::class,
+            'show'
+        ])->name('cash-remittances.show');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Edit Cash Remittance
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/cash-remittances/{cashRemittance}/edit', [
+            CashRemittanceController::class,
+            'edit'
+        ])->name('cash-remittances.edit');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update Cash Remittance
+        |--------------------------------------------------------------------------
+        */
+
+        Route::put('/cash-remittances/{cashRemittance}', [
+            CashRemittanceController::class,
+            'update'
+        ])->name('cash-remittances.update');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Delete Cash Remittance
+        |--------------------------------------------------------------------------
+        */
+
+        Route::delete('/cash-remittances/{cashRemittance}', [
+            CashRemittanceController::class,
+            'destroy'
+        ])->name('cash-remittances.destroy');
+
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
     | REPORTS
     |--------------------------------------------------------------------------
+    |
+    | Finance has access to Reports.
+    |
+    | Procurement also has access, but the ReportController must restrict
+    | the actual report content for Procurement to purchasing/inventory
+    | reports only.
+    |
     */
 
     Route::middleware(
