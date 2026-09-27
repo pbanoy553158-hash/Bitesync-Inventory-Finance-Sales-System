@@ -570,6 +570,23 @@
                 0 6px 14px rgba(168, 95, 40, 0.20);
         }
 
+        .signup-link {
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .signup-link a {
+            color: var(--orange-dark);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
         /* =========================================================
            FOOTER
         ========================================================= */
@@ -983,6 +1000,11 @@
                 </button>
 
             </form>
+
+            <div class="signup-link">
+                Need a BiteSync account?
+                <a href="{{ route('signup') }}">Sign up</a>
+            </div>
 
 
             <!-- FOOTER -->

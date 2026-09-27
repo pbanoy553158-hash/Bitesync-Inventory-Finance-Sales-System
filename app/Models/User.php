@@ -10,11 +10,16 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public const APPROVAL_PENDING = 'pending';
+
+    public const APPROVAL_APPROVED = 'approved';
+
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'approval_status',
     ];
 
     protected $hidden = [
@@ -48,5 +53,10 @@ class User extends Authenticatable
     public function isRole(string $role): bool
     {
         return $this->role === $role;
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->approval_status === self::APPROVAL_APPROVED;
     }
 }

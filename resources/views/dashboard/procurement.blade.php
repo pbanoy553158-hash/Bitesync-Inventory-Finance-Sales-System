@@ -1661,9 +1661,7 @@ document.addEventListener(
 
                                 data:
                                     purchaseActivity.map(
-                                        item => Number(
-                                            item.total ?? 0
-                                        )
+                                        item => Number(item.purchases ?? 0)
                                     ),
 
                                 borderColor:

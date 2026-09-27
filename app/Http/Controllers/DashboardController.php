@@ -395,4 +395,135 @@ class DashboardController extends Controller
         ]);
     }
 
+    /**
+     * Procurement dashboard.
+     */
+    public function procurement(Request $request): View
+    {
+        $today = Carbon::today();
+        $monthStart = $today->copy()->startOfMonth();
+        $monthEnd = $today->copy()->endOfMonth();
+        $activePurchases = Purchase::query()
+            ->where('status', '!=', Purchase::STATUS_CANCELLED);
+
+        $purchaseCount = (clone $activePurchases)->count();
+        $totalPurchases = (float) (clone $activePurchases)->sum('total');
+        $monthlyPurchases = (float) (clone $activePurchases)
+            ->whereBetween('purchase_date', [
+                $monthStart->toDateString(),
+                $monthEnd->toDateString(),
+            ])
+            ->sum('total');
+
+        $pendingApprovalCount = Purchase::query()
+            ->where('status', Purchase::STATUS_PENDING_APPROVAL)
+            ->count();
+
+        $toReceiveCount = Purchase::query()
+            ->whereIn('status', [
+                Purchase::STATUS_ORDERED,
+                Purchase::STATUS_PARTIALLY_RECEIVED,
+            ])
+            ->count();
+
+        $receivedPurchaseCount = Purchase::query()
+            ->where('status', Purchase::STATUS_RECEIVED)
+            ->count();
+
+        $inventoryItems = InventoryItem::query()
+            ->get(['id', 'quantity', 'minimum_stock']);
+
+        $outOfStockCount = $inventoryItems
+            ->filter(fn ($item) => (float) $item->quantity <= 0)
+            ->count();
+
+        $lowStockCount = $inventoryItems
+            ->filter(fn ($item) => (float) $item->quantity > 0
+                && (float) $item->quantity <= (float) $item->minimum_stock)
+            ->count();
+
+        $normalStockCount = max(
+            0,
+            $inventoryItems->count() - $lowStockCount - $outOfStockCount
+        );
+
+        $purchaseStatuses = Purchase::query()
+            ->select('status', DB::raw('COUNT(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        $purchaseStatusOrder = [
+            Purchase::STATUS_DRAFT,
+            Purchase::STATUS_PENDING_APPROVAL,
+            Purchase::STATUS_APPROVED,
+            Purchase::STATUS_REJECTED,
+            Purchase::STATUS_ORDERED,
+            Purchase::STATUS_PARTIALLY_RECEIVED,
+            Purchase::STATUS_RECEIVED,
+            Purchase::STATUS_CANCELLED,
+        ];
+
+        $purchaseActivityStart = $today->copy()->subDays(29);
+        $purchasesByDay = Purchase::query()
+            ->where('status', '!=', Purchase::STATUS_CANCELLED)
+            ->whereBetween('purchase_date', [
+                $purchaseActivityStart->toDateString(),
+                $today->toDateString(),
+            ])
+            ->selectRaw('purchase_date as activity_date, SUM(total) as total')
+            ->groupBy('purchase_date')
+            ->pluck('total', 'activity_date');
+
+        $purchaseActivity = [];
+
+        for (
+            $date = $purchaseActivityStart->copy();
+            $date->lte($today);
+            $date->addDay()
+        ) {
+            $key = $date->toDateString();
+            $purchaseActivity[] = [
+                'date' => $date->format('M d'),
+                'purchases' => round((float) ($purchasesByDay[$key] ?? 0), 2),
+            ];
+        }
+
+        return view('dashboard.procurement', [
+            'user' => $request->user(),
+            'purchaseCount' => $purchaseCount,
+            'pendingApprovalCount' => $pendingApprovalCount,
+            'toReceiveCount' => $toReceiveCount,
+            'receivedPurchaseCount' => $receivedPurchaseCount,
+            'stockAlertCount' => $lowStockCount + $outOfStockCount,
+            'totalPurchases' => $totalPurchases,
+            'monthlyPurchases' => $monthlyPurchases,
+            'supplierCount' => Supplier::query()->count(),
+            'normalStockCount' => $normalStockCount,
+            'lowStockCount' => $lowStockCount,
+            'outOfStockCount' => $outOfStockCount,
+            'purchaseStatuses' => collect($purchaseStatusOrder)
+                ->map(fn ($status) => [
+                    'status' => $status,
+                    'count' => (int) ($purchaseStatuses[$status] ?? 0),
+                ])
+                ->all(),
+            'inventoryHealth' => [
+                ['status' => 'Normal', 'count' => $normalStockCount],
+                ['status' => 'Low Stock', 'count' => $lowStockCount],
+                ['status' => 'Out of Stock', 'count' => $outOfStockCount],
+            ],
+            'purchaseActivity' => $purchaseActivity,
+            'recentPurchases' => (clone $activePurchases)
+                ->with(['supplier', 'creator'])
+                ->latest('purchase_date')
+                ->limit(6)
+                ->get(),
+            'recentStockMovements' => StockMovement::query()
+                ->with('inventoryItem')
+                ->latest()
+                ->limit(6)
+                ->get(),
+        ]);
+    }
+
 }

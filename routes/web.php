@@ -9,9 +9,11 @@ use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -33,6 +35,21 @@ Route::get('/', function () {
 */
 
 Route::middleware('guest')->group(function () {
+
+    Route::get('/signup', [
+        AuthController::class,
+        'showSignup'
+    ])->name('signup');
+
+    Route::get('/signup/pending', [
+        AuthController::class,
+        'showSignupPending'
+    ])->name('signup.pending');
+
+    Route::post('/signup', [
+        AuthController::class,
+        'signup'
+    ])->name('signup.store');
 
     Route::get('/login', [
         AuthController::class,
@@ -67,6 +84,16 @@ Route::middleware('auth')->group(function () {
         'logout'
     ])->name('logout');
 
+    Route::get('/profile', [
+        ProfileController::class,
+        'edit'
+    ])->name('profile.edit');
+
+    Route::put('/profile', [
+        ProfileController::class,
+        'update'
+    ])->name('profile.update');
+
 
     /*
     |--------------------------------------------------------------------------
@@ -80,6 +107,16 @@ Route::middleware('auth')->group(function () {
             DashboardController::class,
             'admin'
         ])->name('admin.dashboard');
+
+        Route::get('/admin/users', [
+            UserController::class,
+            'index'
+        ])->name('admin.users.index');
+
+        Route::post('/admin/users/{user}/approve', [
+            UserController::class,
+            'approve'
+        ])->name('admin.users.approve');
 
     });
 
@@ -321,28 +358,24 @@ Route::middleware('auth')->group(function () {
     | PRODUCTS
     |--------------------------------------------------------------------------
     |
-    | Products are restricted to CEO/Admin.
+    | Product management is restricted to CEO/Admin.
     |
     | Finance does NOT have Product access.
-    | Procurement does NOT have Product access.
+    | Procurement can view Products.
     |
     */
 
     Route::middleware(
+        'role:CEO/Admin,Procurement'
+    )->get('/products', [
+        ProductController::class,
+        'index'
+    ])->name('products.index');
+
+
+    Route::middleware(
         'role:CEO/Admin'
     )->group(function () {
-
-        /*
-        |--------------------------------------------------------------------------
-        | Product List
-        |--------------------------------------------------------------------------
-        */
-
-        Route::get('/products', [
-            ProductController::class,
-            'index'
-        ])->name('products.index');
-
 
         /*
         |--------------------------------------------------------------------------

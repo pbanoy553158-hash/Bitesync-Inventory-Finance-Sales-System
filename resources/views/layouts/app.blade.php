@@ -1068,10 +1068,11 @@ label {
 
     <!-- =================================================
          PRODUCTS
-         CEO/Admin ONLY
+         CEO/Admin = manage
+         Procurement = view
     ================================================== -->
 
-    @if ($isAdmin)
+    @if ($isAdmin || $isProcurement)
 
         <a
             href="{{ route('products.index') }}"
@@ -1254,80 +1255,109 @@ label {
 
 
 <!-- =====================================================
-     ADMINISTRATION
-     CEO/Admin ONLY
+     ADMINISTRATION / MY ACCOUNT
+     CEO/Admin = full access
+     Procurement = profile
 ====================================================== -->
 
-@if ($isAdmin)
+@if ($isAdmin || $isProcurement)
 
     <div class="admin-section">
 
         <div class="nav-title">
-            Administration
+            {{ $isProcurement ? 'My Account' : 'Administration' }}
         </div>
 
 
         <nav class="nav">
 
 
-            <!-- =================================================
-                 USER MANAGEMENT
-            ================================================== -->
+            @if ($isAdmin)
 
-            <a
-                href="#"
-                class="nav-item"
-            >
+                <!-- =================================================
+                     USER MANAGEMENT
+                ================================================== -->
 
-                <span class="nav-icon">
-                    ♙
-                </span>
+                <a
+                    href="{{ route('admin.users.index') }}"
+                    class="nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}"
+                >
 
-                <span>
-                    User Management
-                </span>
+                    <span class="nav-icon">
+                        ♙
+                    </span>
 
-            </a>
+                    <span>
+                        User Management
+                    </span>
+
+                </a>
+
+            @endif
+
+            @if ($isProcurement)
+
+                <a
+                    href="{{ route('profile.edit') }}"
+                    class="nav-item {{ request()->routeIs('profile.*') ? 'active' : '' }}"
+                >
+
+                    <span class="nav-icon">
+                        ♙
+                    </span>
+
+                    <span>
+                        Edit Profile
+                    </span>
+
+                </a>
+
+            @elseif ($isAdmin)
+
+                <!-- =================================================
+                     SYSTEM SETTINGS
+                ================================================== -->
+
+                <a
+                    href="#"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        ⚙
+                    </span>
+
+                    <span>
+                        System Settings
+                    </span>
+
+                </a>
+
+            @endif
 
 
-            <!-- =================================================
-                 SYSTEM SETTINGS
-            ================================================== -->
+            @if ($isAdmin)
 
-            <a
-                href="#"
-                class="nav-item"
-            >
+                <!-- =================================================
+                     AUDIT LOGS
+                ================================================== -->
 
-                <span class="nav-icon">
-                    ⚙
-                </span>
+                <a
+                    href="#"
+                    class="nav-item"
+                >
 
-                <span>
-                    System Settings
-                </span>
+                    <span class="nav-icon">
+                        ◷
+                    </span>
 
-            </a>
+                    <span>
+                        Audit Logs
+                    </span>
 
+                </a>
 
-            <!-- =================================================
-                 AUDIT LOGS
-            ================================================== -->
-
-            <a
-                href="#"
-                class="nav-item"
-            >
-
-                <span class="nav-icon">
-                    ◷
-                </span>
-
-                <span>
-                    Audit Logs
-                </span>
-
-            </a>
+            @endif
 
         </nav>
 
