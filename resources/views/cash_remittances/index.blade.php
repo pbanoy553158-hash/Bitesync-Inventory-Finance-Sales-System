@@ -663,34 +663,33 @@
                                 </a>
 
 
-                                <!-- DELETE -->
+                                <!-- CANCEL -->
 
                                 <form
                                     method="POST"
                                     action="{{ route(
-                                        'cash-remittances.destroy',
+                                        'cash-remittances.cancel',
                                         $remittance
                                     ) }}"
                                     onsubmit="return confirm(
-                                        'Are you sure you want to delete this cash remittance?'
+                                        'Are you sure you want to cancel this cash remittance?'
                                     );"
                                     class="expense-delete-form"
                                 >
 
                                     @csrf
 
-                                    @method('DELETE')
-
                                     <button
                                         type="submit"
                                         class="expense-delete-button"
+                                        @if($remittance->status === 'Voided') disabled @endif
                                     >
 
                                         <span>
                                             ×
                                         </span>
 
-                                        Delete
+                                        Cancel
 
                                     </button>
 
@@ -1849,7 +1848,7 @@
 
 
 /* =========================================================
-   DELETE BUTTON
+   CANCEL BUTTON
 ========================================================= */
 
 .expense-delete-button {
@@ -1894,13 +1893,21 @@
 }
 
 
-.expense-delete-button:hover {
+.expense-delete-button:hover:not(:disabled) {
 
     background: #fff7f5;
 
     border-color: #dfbcb4;
 
     color: #8d463b;
+}
+
+
+.expense-delete-button:disabled {
+
+    opacity: 0.5;
+
+    cursor: not-allowed;
 }
 
 

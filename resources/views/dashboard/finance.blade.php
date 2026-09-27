@@ -22,8 +22,6 @@
 
 /* ============================================================
    FINANCE DASHBOARD
-   SAME VISUAL SYSTEM AS PROCUREMENT DASHBOARD
-   FINANCE DATA ONLY
    ============================================================ */
 
 .dashboard-page {
@@ -46,7 +44,6 @@
     margin-bottom: 17px;
 }
 
-
 .dashboard-page .page-title small {
     display: block;
     margin-bottom: 5px;
@@ -57,7 +54,6 @@
     text-transform: uppercase;
 }
 
-
 .dashboard-page .page-title h1 {
     margin: 0;
     color: #241a14;
@@ -67,7 +63,6 @@
     letter-spacing: -.045rem;
 }
 
-
 .dashboard-page .page-title p {
     margin: 6px 0 0;
     color: #8b8179;
@@ -75,7 +70,6 @@
     line-height: 1.5;
     font-weight: 400;
 }
-
 
 .dashboard-page .date-box {
     display: inline-flex;
@@ -92,7 +86,6 @@
     white-space: nowrap;
     box-shadow: 0 3px 12px rgba(43,31,23,.025);
 }
-
 
 .dashboard-page .date-icon {
     display: flex;
@@ -126,7 +119,6 @@
     line-height: 1.45;
 }
 
-
 .finance-notice-icon {
     width: 28px;
     height: 28px;
@@ -140,7 +132,6 @@
     font-size: .68rem;
     font-weight: 800;
 }
-
 
 .finance-notice strong {
     color: #4f443b;
@@ -158,7 +149,6 @@
     margin-bottom: 17px;
 }
 
-
 .dashboard-kpi {
     min-height: 125px;
     display: flex;
@@ -174,7 +164,6 @@
     overflow: hidden;
 }
 
-
 .dashboard-kpi::before {
     content: "";
     position: absolute;
@@ -184,7 +173,6 @@
     width: 3px;
     background: linear-gradient(180deg, #c47a3a, #e2a16c);
 }
-
 
 .dashboard-kpi-left {
     min-width: 0;
@@ -198,7 +186,6 @@
     padding-top: 2px;
 }
 
-
 .dashboard-kpi-label {
     color: #8b8179;
     font-size: .6875rem;
@@ -208,7 +195,6 @@
     white-space: nowrap;
     text-transform: uppercase;
 }
-
 
 .dashboard-kpi-note {
     margin-top: auto;
@@ -222,7 +208,6 @@
     text-overflow: ellipsis;
 }
 
-
 .dashboard-kpi-right {
     min-width: 88px;
     display: flex;
@@ -232,7 +217,6 @@
     padding-top: 3px;
     flex-shrink: 0;
 }
-
 
 .dashboard-kpi-icon {
     width: 34px;
@@ -248,24 +232,20 @@
     font-weight: 800;
 }
 
-
 .dashboard-kpi-icon.green {
     background: #edf6ef;
     color: #5d8b67;
 }
-
 
 .dashboard-kpi-icon.blue {
     background: #edf2f7;
     color: #637f9f;
 }
 
-
 .dashboard-kpi-icon.red {
     background: #fbeeed;
     color: #b95d56;
 }
-
 
 .dashboard-kpi-value {
     margin-top: 13px;
@@ -276,7 +256,6 @@
     text-align: right;
     white-space: nowrap;
 }
-
 
 .dashboard-kpi-value.money {
     font-size: clamp(1rem, 1.3vw, 1.25rem);
@@ -324,7 +303,6 @@
     box-shadow: 0 4px 16px rgba(43,31,23,.035);
 }
 
-
 .dashboard-panel-header {
     min-height: 65px;
     display: flex;
@@ -335,7 +313,6 @@
     border-bottom: 1px solid #e4dcd4;
 }
 
-
 .dashboard-panel-heading h2 {
     margin: 0;
     color: #241a14;
@@ -344,7 +321,6 @@
     font-weight: 700;
 }
 
-
 .dashboard-panel-heading p {
     margin: 3px 0 0;
     color: #8b8179;
@@ -352,7 +328,6 @@
     line-height: 1.4;
     font-weight: 400;
 }
-
 
 .dashboard-panel-body {
     padding: 18px;
@@ -369,7 +344,6 @@
     position: relative;
 }
 
-
 .dashboard-chart-small {
     min-height: 300px;
 }
@@ -384,7 +358,6 @@
     gap: 13px;
 }
 
-
 .finance-row {
     display: flex;
     align-items: center;
@@ -394,18 +367,15 @@
     border-bottom: 1px solid #f0ebe6;
 }
 
-
 .finance-row:last-child {
     padding-bottom: 0;
     border-bottom: 0;
 }
 
-
 .finance-label {
     color: #8b8179;
     font-size: .72rem;
 }
-
 
 .finance-value {
     color: #241a14;
@@ -414,33 +384,27 @@
     text-align: right;
 }
 
-
 .finance-value.orange {
     color: #a85f28;
 }
-
 
 .finance-value.green {
     color: #5d8b67;
 }
 
-
 .finance-value.red {
     color: #b95d56;
 }
 
-
 .finance-value.blue {
     color: #637f9f;
 }
-
 
 .finance-divider {
     height: 1px;
     background: #e4dcd4;
     margin: 3px 0;
 }
-
 
 .finance-highlight {
     padding: 14px;
@@ -449,7 +413,6 @@
     border: 1px solid #eee6de;
 }
 
-
 .finance-highlight-label {
     color: #8b8179;
     font-size: .65rem;
@@ -457,7 +420,6 @@
     letter-spacing: .04rem;
     text-transform: uppercase;
 }
-
 
 .finance-highlight-value {
     margin-top: 6px;
@@ -490,13 +452,11 @@
     overflow-x: auto;
 }
 
-
 .dashboard-table {
     width: 100%;
     min-width: 560px;
     border-collapse: collapse;
 }
-
 
 .dashboard-table th {
     padding: 10px 12px;
@@ -512,7 +472,6 @@
     white-space: nowrap;
 }
 
-
 .dashboard-table td {
     padding: 11px 12px;
     color: #625951;
@@ -522,17 +481,14 @@
     vertical-align: middle;
 }
 
-
 .dashboard-table tbody tr:last-child td {
     border-bottom: 0;
 }
-
 
 .dashboard-number {
     color: #a85f28;
     font-weight: 700;
 }
-
 
 .dashboard-amount {
     color: #241a14;
@@ -557,42 +513,35 @@
     white-space: nowrap;
 }
 
-
 .dashboard-status.completed {
     background: #edf6ef;
     color: #5d8b67;
 }
-
 
 .dashboard-status.cash {
     background: #edf6ef;
     color: #5d8b67;
 }
 
-
 .dashboard-status.pending {
     background: #fbf1e3;
     color: #b9823e;
 }
-
 
 .dashboard-status.cancelled {
     background: #fbeeed;
     color: #b95d56;
 }
 
-
 .dashboard-status.card {
     background: #edf2f7;
     color: #637f9f;
 }
 
-
 .dashboard-status.gcash {
     background: #f4e4d4;
     color: #a85f28;
 }
-
 
 .dashboard-status.other {
     background: #edf2f7;
@@ -609,7 +558,6 @@
     text-align: center;
 }
 
-
 .dashboard-empty-icon {
     width: 42px;
     height: 42px;
@@ -623,13 +571,11 @@
     font-size: 15px;
 }
 
-
 .dashboard-empty-title {
     color: #625951;
     font-size: .8rem;
     font-weight: 700;
 }
-
 
 .dashboard-empty-text {
     margin-top: 4px;
@@ -654,7 +600,6 @@
 
 }
 
-
 @media (max-width: 850px) {
 
     .dashboard-operational-grid,
@@ -663,7 +608,6 @@
     }
 
 }
-
 
 @media (max-width: 700px) {
 
@@ -710,7 +654,6 @@
     }
 
 }
-
 
 @media (max-width: 480px) {
 
@@ -967,7 +910,9 @@
     <div class="dashboard-main-grid">
 
 
-        {{-- Sales Activity --}}
+        {{-- ========================================================
+             SALES ACTIVITY WAVE
+             ======================================================== --}}
 
         <div class="dashboard-panel">
 
@@ -980,7 +925,7 @@
                     </h2>
 
                     <p>
-                        Daily completed sales for the selected period.
+                        Daily completed sales from August through September.
                     </p>
 
                 </div>
@@ -1002,7 +947,9 @@
 
 
 
-        {{-- Financial Summary --}}
+        {{-- ========================================================
+             FINANCIAL SUMMARY
+             ======================================================== --}}
 
         <div class="dashboard-panel">
 
@@ -1566,6 +1513,7 @@ document.addEventListener(
 
         /* ==========================================================
            SALES ACTIVITY
+           AUGUST → SEPTEMBER WAVE CHART
            ========================================================== */
 
         const salesActivityCanvas =
@@ -1576,47 +1524,271 @@ document.addEventListener(
 
         if (salesActivityCanvas) {
 
+
+            /*
+             * Create a date map from database data.
+             *
+             * Expected database structure:
+             *
+             * [
+             *     {
+             *         date: "2026-08-01",
+             *         total: 1500
+             *     },
+             *     ...
+             * ]
+             */
+
+            const salesMap = {};
+
+
+            salesActivity.forEach(function(item) {
+
+                if (!item.date) {
+                    return;
+                }
+
+                const date =
+                    new Date(item.date);
+
+
+                if (isNaN(date.getTime())) {
+                    return;
+                }
+
+
+                const key =
+                    date.toISOString()
+                        .slice(0, 10);
+
+
+                salesMap[key] =
+                    Number(item.total ?? 0);
+
+            });
+
+
+
+            /*
+             * Use the current year.
+             *
+             * Change this to a specific year if your
+             * dashboard is intended for a fixed year.
+             */
+
+            const chartYear =
+                new Date().getFullYear();
+
+
+
+            /*
+             * August 1
+             */
+
+            const startDate =
+                new Date(
+                    chartYear,
+                    7,
+                    1
+                );
+
+
+
+            /*
+             * September 30
+             */
+
+            const endDate =
+                new Date(
+                    chartYear,
+                    8,
+                    30
+                );
+
+
+
+            const waveLabels = [];
+
+            const waveValues = [];
+
+
+            /*
+             * Build every day from August 1
+             * through September 30.
+             *
+             * Missing days receive 0.
+             */
+
+            for (
+                let currentDate =
+                    new Date(startDate);
+
+                currentDate <= endDate;
+
+                currentDate.setDate(
+                    currentDate.getDate() + 1
+                )
+            ) {
+
+
+                const year =
+                    currentDate.getFullYear();
+
+
+                const month =
+                    String(
+                        currentDate.getMonth() + 1
+                    ).padStart(2, '0');
+
+
+                const day =
+                    String(
+                        currentDate.getDate()
+                    ).padStart(2, '0');
+
+
+                const key =
+                    `${year}-${month}-${day}`;
+
+
+                const displayDate =
+                    currentDate.toLocaleDateString(
+                        'en-PH',
+                        {
+                            month: 'short',
+                            day: 'numeric'
+                        }
+                    );
+
+
+                waveLabels.push(
+                    displayDate
+                );
+
+
+                waveValues.push(
+                    Number(
+                        salesMap[key] ?? 0
+                    )
+                );
+
+            }
+
+
+
+            /* ======================================================
+               SALES WAVE GRADIENT
+               ====================================================== */
+
+            const chartContext =
+                salesActivityCanvas.getContext(
+                    '2d'
+                );
+
+
+            const salesGradient =
+                chartContext.createLinearGradient(
+                    0,
+                    0,
+                    0,
+                    320
+                );
+
+
+            salesGradient.addColorStop(
+                0,
+                'rgba(196, 122, 58, 0.32)'
+            );
+
+
+            salesGradient.addColorStop(
+                0.55,
+                'rgba(196, 122, 58, 0.12)'
+            );
+
+
+            salesGradient.addColorStop(
+                1,
+                'rgba(196, 122, 58, 0.01)'
+            );
+
+
+
+            /* ======================================================
+               CREATE WAVE CHART
+               ====================================================== */
+
             new Chart(
                 salesActivityCanvas,
                 {
 
                     type: 'line',
 
+
                     data: {
 
                         labels:
-                            salesActivity.map(
-                                item => item.date
-                            ),
+                            waveLabels,
+
 
                         datasets: [
 
                             {
 
-                                label: 'Sales',
+                                label:
+                                    'Sales',
+
 
                                 data:
-                                    salesActivity.map(
-                                        item => Number(
-                                            item.total ?? 0
-                                        )
-                                    ),
+                                    waveValues,
+
 
                                 borderColor:
                                     '#c47a3a',
 
+
                                 backgroundColor:
-                                    'rgba(196,122,58,.10)',
+                                    salesGradient,
 
-                                borderWidth: 2,
 
-                                fill: true,
+                                borderWidth:
+                                    2.5,
 
-                                tension: .35,
 
-                                pointRadius: 2,
+                                fill:
+                                    true,
 
-                                pointHoverRadius: 4
+
+                                tension:
+                                    0.45,
+
+
+                                cubicInterpolationMode:
+                                    'monotone',
+
+
+                                pointRadius:
+                                    0,
+
+
+                                pointHoverRadius:
+                                    5,
+
+
+                                pointHoverBackgroundColor:
+                                    '#c47a3a',
+
+
+                                pointHoverBorderColor:
+                                    '#ffffff',
+
+
+                                pointHoverBorderWidth:
+                                    3,
+
+
+                                spanGaps:
+                                    true
 
                             }
 
@@ -1627,15 +1799,21 @@ document.addEventListener(
 
                     options: {
 
-                        responsive: true,
+                        responsive:
+                            true,
 
-                        maintainAspectRatio: false,
+
+                        maintainAspectRatio:
+                            false,
+
 
                         interaction: {
 
-                            mode: 'index',
+                            mode:
+                                'index',
 
-                            intersect: false
+                            intersect:
+                                false
 
                         },
 
@@ -1644,23 +1822,43 @@ document.addEventListener(
 
                             legend: {
 
-                                position: 'top',
+                                display:
+                                    true,
 
-                                align: 'end',
+
+                                position:
+                                    'top',
+
+
+                                align:
+                                    'end',
+
 
                                 labels: {
 
-                                    usePointStyle: true,
+                                    usePointStyle:
+                                        true,
 
-                                    boxWidth: 7,
 
-                                    padding: 15,
+                                    pointStyle:
+                                        'line',
+
+
+                                    boxWidth:
+                                        22,
+
+
+                                    padding:
+                                        15,
+
 
                                     font: {
 
-                                        size: 10,
+                                        size:
+                                            10,
 
-                                        weight: '600'
+                                        weight:
+                                            '600'
 
                                     }
 
@@ -1671,7 +1869,45 @@ document.addEventListener(
 
                             tooltip: {
 
+                                backgroundColor:
+                                    '#241a14',
+
+
+                                titleColor:
+                                    '#ffffff',
+
+
+                                bodyColor:
+                                    '#f4e4d4',
+
+
+                                borderColor:
+                                    '#c47a3a',
+
+
+                                borderWidth:
+                                    1,
+
+
+                                padding:
+                                    10,
+
+
+                                displayColors:
+                                    false,
+
+
                                 callbacks: {
+
+                                    title:
+                                        function(context) {
+
+                                            return (
+                                                context[0].label
+                                            );
+
+                                        },
+
 
                                     label:
                                         function(context) {
@@ -1683,8 +1919,11 @@ document.addEventListener(
                                                 ).toLocaleString(
                                                     'en-PH',
                                                     {
-                                                        minimumFractionDigits: 2,
-                                                        maximumFractionDigits: 2
+                                                        minimumFractionDigits:
+                                                            2,
+
+                                                        maximumFractionDigits:
+                                                            2
                                                     }
                                                 )
                                             );
@@ -1704,19 +1943,57 @@ document.addEventListener(
 
                                 grid: {
 
-                                    display: false
+                                    display:
+                                        false
 
                                 },
 
+
+                                border: {
+
+                                    display:
+                                        false
+
+                                },
+
+
                                 ticks: {
 
-                                    maxTicksLimit: 8,
+                                    maxTicksLimit:
+                                        10,
+
+
+                                    autoSkip:
+                                        true,
+
+
+                                    maxRotation:
+                                        0,
+
+
+                                    minRotation:
+                                        0,
+
 
                                     font: {
 
-                                        size: 9
+                                        size:
+                                            9
 
-                                    }
+                                    },
+
+
+                                    callback:
+                                        function(
+                                            value,
+                                            index
+                                        ) {
+
+                                            return waveLabels[
+                                                index
+                                            ];
+
+                                        }
 
                                 }
 
@@ -1725,35 +2002,61 @@ document.addEventListener(
 
                             y: {
 
-                                beginAtZero: true,
+                                beginAtZero:
+                                    true,
+
+
+                                border: {
+
+                                    display:
+                                        false
+
+                                },
+
 
                                 grid: {
 
                                     color:
-                                        '#eee8e2'
+                                        '#eee8e2',
+
+
+                                    drawTicks:
+                                        false
 
                                 },
 
+
                                 ticks: {
+
+                                    padding:
+                                        8,
+
 
                                     font: {
 
-                                        size: 9
+                                        size:
+                                            9
 
                                     },
+
 
                                     callback:
                                         function(value) {
 
-                                            return '₱' +
+                                            return (
+                                                '₱' +
                                                 Number(value)
                                                     .toLocaleString(
                                                         'en-PH',
                                                         {
                                                             notation:
-                                                                'compact'
+                                                                'compact',
+
+                                                            maximumFractionDigits:
+                                                                1
                                                         }
-                                                    );
+                                                    )
+                                            );
 
                                         }
 
@@ -2128,7 +2431,9 @@ document.addEventListener(
 
                         {
 
-                            id: 'expenseCategoryCenterText',
+                            id:
+                                'expenseCategoryCenterText',
+
 
                             beforeDraw:
                                 function(chart) {

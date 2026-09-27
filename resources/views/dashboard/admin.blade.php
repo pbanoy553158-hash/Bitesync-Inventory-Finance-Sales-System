@@ -102,7 +102,7 @@
 
 .dashboard-kpis {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 17px;
     margin-bottom: 17px;
 }
@@ -241,6 +241,11 @@
 .dashboard-kpi-icon.red {
     background: #fbeeed;
     color: #b95d56;
+}
+
+.dashboard-kpi-icon.purple {
+    background: #f3eef8;
+    color: #7c6a9c;
 }
 
 
@@ -746,11 +751,18 @@
    RESPONSIVE
    ============================================================ */
 
+@media (max-width: 1400px) {
+
+    .dashboard-kpis {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+}
+
 @media (max-width: 1200px) {
 
     .dashboard-kpis {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .dashboard-main-grid {
@@ -860,7 +872,7 @@
             </h1>
 
             <p>
-                Monitor BiteSync sales, purchasing, expenses, and inventory performance.
+                Monitor BiteSync sales, purchasing, expenses, remittances, and inventory performance.
             </p>
 
         </div>
@@ -900,7 +912,7 @@
                 </div>
 
                 <div class="dashboard-kpi-note">
-                    {{ number_format($salesCount) }}
+                    {{ number_format($salesCount ?? 0) }}
                     completed transactions
                 </div>
 
@@ -914,7 +926,7 @@
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format($totalSales, 2) }}
+                    ₱{{ number_format($totalSales ?? 0, 2) }}
                 </div>
 
             </div>
@@ -936,7 +948,7 @@
                 </div>
 
                 <div class="dashboard-kpi-note">
-                    {{ number_format($purchaseCount) }}
+                    {{ number_format($purchaseCount ?? 0) }}
                     non-cancelled purchases
                 </div>
 
@@ -950,7 +962,7 @@
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format($totalPurchases, 2) }}
+                    ₱{{ number_format($totalPurchases ?? 0, 2) }}
                 </div>
 
             </div>
@@ -972,7 +984,7 @@
                 </div>
 
                 <div class="dashboard-kpi-note">
-                    {{ number_format($expenseCount) }}
+                    {{ number_format($expenseCount ?? 0) }}
                     recorded expenses
                 </div>
 
@@ -986,7 +998,43 @@
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format($totalExpenses, 2) }}
+                    ₱{{ number_format($totalExpenses ?? 0, 2) }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        {{-- ========================================================
+             CASH REMITTANCE
+             ======================================================== --}}
+
+        <div class="dashboard-kpi">
+
+            <div class="dashboard-kpi-left">
+
+                <div class="dashboard-kpi-label">
+                    Cash Remittance
+                </div>
+
+                <div class="dashboard-kpi-note">
+                    {{ number_format($remittanceCount ?? 0) }}
+                    remittances recorded
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-kpi-right">
+
+                <div class="dashboard-kpi-icon purple">
+                    ₱
+                </div>
+
+                <div class="dashboard-kpi-value money">
+                    ₱{{ number_format($totalRemittances ?? 0, 2) }}
                 </div>
 
             </div>
@@ -1008,7 +1056,7 @@
                 </div>
 
                 <div class="dashboard-kpi-note">
-                    {{ number_format($inventoryCount) }}
+                    {{ number_format($inventoryCount ?? 0) }}
                     inventory items
                 </div>
 
@@ -1022,7 +1070,7 @@
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format($inventoryValue, 2) }}
+                    ₱{{ number_format($inventoryValue ?? 0, 2) }}
                 </div>
 
             </div>
@@ -1112,7 +1160,7 @@
                         </span>
 
                         <span class="financial-value positive">
-                            ₱{{ number_format($totalSales, 2) }}
+                            ₱{{ number_format($totalSales ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1125,7 +1173,7 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($totalPurchases, 2) }}
+                            ₱{{ number_format($totalPurchases ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1138,7 +1186,20 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($totalExpenses, 2) }}
+                            ₱{{ number_format($totalExpenses ?? 0, 2) }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="financial-row">
+
+                        <span class="financial-label">
+                            Cash Remittance
+                        </span>
+
+                        <span class="financial-value positive">
+                            ₱{{ number_format($totalRemittances ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1154,9 +1215,9 @@
                         </div>
 
                         <div class="financial-highlight-value
-                            {{ $netPosition >= 0 ? 'positive' : 'negative' }}">
+                            {{ ($netPosition ?? 0) >= 0 ? 'positive' : 'negative' }}">
 
-                            ₱{{ number_format($netPosition, 2) }}
+                            ₱{{ number_format($netPosition ?? 0, 2) }}
 
                         </div>
 
@@ -1170,7 +1231,7 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($monthlySales, 2) }}
+                            ₱{{ number_format($monthlySales ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1183,7 +1244,7 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($monthlyPurchases, 2) }}
+                            ₱{{ number_format($monthlyPurchases ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1196,7 +1257,20 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($monthlyExpenses, 2) }}
+                            ₱{{ number_format($monthlyExpenses ?? 0, 2) }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="financial-row">
+
+                        <span class="financial-label">
+                            This Month Remittance
+                        </span>
+
+                        <span class="financial-value">
+                            ₱{{ number_format($monthlyRemittances ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1341,7 +1415,7 @@
 
 
                     <div class="stock-card-value">
-                        {{ number_format($normalStockCount) }}
+                        {{ number_format($normalStockCount ?? 0) }}
                     </div>
 
                 </div>
@@ -1363,7 +1437,7 @@
 
 
                     <div class="stock-card-value">
-                        {{ number_format($lowStockCount) }}
+                        {{ number_format($lowStockCount ?? 0) }}
                     </div>
 
                 </div>
@@ -1385,7 +1459,7 @@
 
 
                     <div class="stock-card-value">
-                        {{ number_format($outOfStockCount) }}
+                        {{ number_format($outOfStockCount ?? 0) }}
                     </div>
 
                 </div>
@@ -1428,7 +1502,7 @@
             </div>
 
 
-            @if ($recentSales->count())
+            @if (($recentSales ?? collect())->count())
 
                 <div class="dashboard-table-wrapper">
 
@@ -1556,7 +1630,7 @@
             </div>
 
 
-            @if ($recentExpenses->count())
+            @if (($recentExpenses ?? collect())->count())
 
                 <div class="dashboard-table-wrapper">
 

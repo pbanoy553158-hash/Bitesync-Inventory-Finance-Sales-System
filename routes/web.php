@@ -940,20 +940,20 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | CASH REMITTANCE - FINANCE ONLY
+    | CASH REMITTANCE
     |--------------------------------------------------------------------------
     |
-    | Finance can:
+    | CEO/Admin + Finance can:
     |
     | - View remittance records
     | - Create a remittance
     | - View a remittance
     | - Edit a remittance
-    | - Delete a remittance
+    | - Cancel a remittance
     |
     */
 
-    Route::middleware('role:Finance')->group(function () {
+    Route::middleware('role:CEO/Admin,Finance')->group(function () {
 
         /*
         |--------------------------------------------------------------------------
@@ -1029,14 +1029,14 @@ Route::middleware('auth')->group(function () {
 
         /*
         |--------------------------------------------------------------------------
-        | Delete Cash Remittance
+        | Cancel Cash Remittance
         |--------------------------------------------------------------------------
         */
 
-        Route::delete('/cash-remittances/{cashRemittance}', [
+        Route::post('/cash-remittances/{cashRemittance}/cancel', [
             CashRemittanceController::class,
-            'destroy'
-        ])->name('cash-remittances.destroy');
+            'cancel'
+        ])->name('cash-remittances.cancel');
 
     });
 

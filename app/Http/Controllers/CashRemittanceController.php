@@ -374,22 +374,36 @@ class CashRemittanceController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | Delete Cash Remittance
+    | Cancel Cash Remittance
     |--------------------------------------------------------------------------
+    |
+    | Soft cancel — marks the record as Voided instead of deleting it.
+    | This preserves the audit trail.
+    |
     */
 
-    public function destroy(
+    public function cancel(
         CashRemittance $cashRemittance
     ): RedirectResponse {
 
-        $cashRemittance->delete();
+        if ($cashRemittance->status === 'Voided') {
+            return redirect()
+                ->route('cash-remittances.index')
+                ->with(
+                    'error',
+                    'This cash remittance is already cancelled.'
+                );
+        }
 
+        $cashRemittance->update([
+            'status' => 'Voided',
+        ]);
 
         return redirect()
             ->route('cash-remittances.index')
             ->with(
                 'success',
-                'Cash remittance deleted successfully.'
+                'Cash remittance cancelled successfully.'
             );
     }
 }

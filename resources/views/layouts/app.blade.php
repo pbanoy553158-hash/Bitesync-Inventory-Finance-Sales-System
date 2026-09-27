@@ -1201,10 +1201,12 @@ label {
 
     <!-- =================================================
          CASH REMITTANCE
-         Finance ONLY
+         CEO/Admin = manage
+         Finance = manage
+         Procurement = NO ACCESS
     ================================================== -->
 
-    @if ($isFinance)
+    @if ($isAdmin || $isFinance)
 
         <a
             href="{{ route('cash-remittances.index') }}"

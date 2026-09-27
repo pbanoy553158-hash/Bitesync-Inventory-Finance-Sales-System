@@ -5,7 +5,6 @@
 @section('content')
 
 <style>
-
 .cash-edit-page {
     width: 100%;
     max-width: 1100px;
@@ -98,6 +97,7 @@
     font-family: inherit;
     font-size: 11px;
     outline: none;
+    box-sizing: border-box;
 }
 
 .cash-edit-field input,
@@ -119,6 +119,53 @@
     box-shadow: 0 0 0 3px rgba(196,122,58,.08);
 }
 
+/* ============================================================
+   READ-ONLY AMOUNT FIELDS
+   ============================================================ */
+
+.cash-readonly-wrapper {
+    position: relative;
+}
+
+.cash-readonly-wrapper input {
+    background: #f5f2ee;
+    border-color: #e2d9d0;
+    color: #5e5148;
+    cursor: not-allowed;
+    padding-right: 95px;
+}
+
+.cash-readonly-wrapper input:focus {
+    border-color: #e2d9d0;
+    box-shadow: none;
+}
+
+.cash-readonly-badge {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: #e8e1da;
+    color: #786d65;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+.cash-readonly-note {
+    margin-top: 5px;
+    color: #9a9088;
+    font-size: 9px;
+}
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+
 .cash-error {
     margin-bottom: 17px;
     padding: 11px 14px;
@@ -133,6 +180,10 @@
     margin: 0;
     padding-left: 17px;
 }
+
+/* ============================================================
+   VARIANCE
+   ============================================================ */
 
 .cash-variance-preview {
     padding: 15px;
@@ -153,6 +204,10 @@
     font-size: 21px;
     font-weight: 800;
 }
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
 
 .cash-edit-actions {
     display: flex;
@@ -198,6 +253,10 @@
     background: #aa6830;
 }
 
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
 @media (max-width: 700px) {
 
     .cash-edit-grid {
@@ -212,12 +271,19 @@
         flex-direction: column-reverse;
     }
 
+    .cash-cancel,
+    .cash-update {
+        width: 100%;
+    }
 }
-
 </style>
 
 
 <div class="cash-edit-page">
+
+    {{-- ========================================================
+         HEADER
+    ========================================================= --}}
 
     <div class="cash-edit-header">
 
@@ -235,6 +301,10 @@
 
     </div>
 
+
+    {{-- ========================================================
+         VALIDATION ERRORS
+    ========================================================= --}}
 
     @if ($errors->any())
 
@@ -257,6 +327,10 @@
     @endif
 
 
+    {{-- ========================================================
+         EDIT FORM
+    ========================================================= --}}
+
     <form
         method="POST"
         action="{{ route('cash-remittances.update', $cashRemittance) }}"
@@ -268,6 +342,10 @@
         @method('PUT')
 
 
+        {{-- ====================================================
+             REMITTANCE INFORMATION
+        ===================================================== --}}
+
         <div class="cash-edit-section">
 
             <h2>
@@ -275,14 +353,18 @@
             </h2>
 
             <p>
-                Update the remittance details and reconciliation amounts.
+                Update the remittance details. The expected amount
+                and amount remitted are locked after the remittance
+                has been recorded.
             </p>
 
 
             <div class="cash-edit-grid">
 
 
-                {{-- REMITTANCE DATE --}}
+                {{-- =================================================
+                     REMITTANCE DATE
+                ================================================== --}}
 
                 <div class="cash-edit-field">
 
@@ -304,7 +386,9 @@
                 </div>
 
 
-                {{-- STATUS --}}
+                {{-- =================================================
+                     STATUS
+                ================================================== --}}
 
                 <div class="cash-edit-field">
 
@@ -342,7 +426,9 @@
                 </div>
 
 
-                {{-- EXPECTED AMOUNT --}}
+                {{-- =================================================
+                     EXPECTED AMOUNT - READ ONLY
+                ================================================== --}}
 
                 <div class="cash-edit-field">
 
@@ -350,47 +436,69 @@
                         Expected Amount
                     </label>
 
-                    <input
-                        type="number"
-                        name="expected_amount"
-                        id="expectedAmount"
-                        value="{{ old(
-                            'expected_amount',
-                            $cashRemittance->expected_amount
-                        ) }}"
-                        min="0"
-                        step="0.01"
-                        required
-                    >
+                    <div class="cash-readonly-wrapper">
+
+                        <input
+                            type="number"
+                            id="expectedAmount"
+                            value="{{ $cashRemittance->expected_amount }}"
+                            min="0"
+                            step="0.01"
+                            readonly
+                            aria-readonly="true"
+                        >
+
+                        <span class="cash-readonly-badge">
+                            Locked
+                        </span>
+
+                    </div>
+
+                    <div class="cash-readonly-note">
+                        Expected amount cannot be changed during editing.
+                    </div>
 
                 </div>
 
 
-                {{-- ACTUAL AMOUNT --}}
+                {{-- =================================================
+                     AMOUNT REMITTED / ACTUAL AMOUNT - READ ONLY
+                ================================================== --}}
 
                 <div class="cash-edit-field">
 
                     <label for="actualAmount">
-                        Actual Amount
+                        Amount Remitted
                     </label>
 
-                    <input
-                        type="number"
-                        name="actual_amount"
-                        id="actualAmount"
-                        value="{{ old(
-                            'actual_amount',
-                            $cashRemittance->actual_amount
-                        ) }}"
-                        min="0"
-                        step="0.01"
-                        required
-                    >
+                    <div class="cash-readonly-wrapper">
+
+                        <input
+                            type="number"
+                            id="actualAmount"
+                            value="{{ $cashRemittance->actual_amount }}"
+                            min="0"
+                            step="0.01"
+                            readonly
+                            aria-readonly="true"
+                        >
+
+                        <span class="cash-readonly-badge">
+                            Locked
+                        </span>
+
+                    </div>
+
+                    <div class="cash-readonly-note">
+                        Amount remitted cannot be changed during editing.
+                    </div>
 
                 </div>
 
 
-                {{-- REFERENCE NUMBER --}}
+                {{-- =================================================
+                     REFERENCE NUMBER
+                ================================================== --}}
 
                 <div class="cash-edit-field">
 
@@ -412,7 +520,9 @@
                 </div>
 
 
-                {{-- VARIANCE PREVIEW --}}
+                {{-- =================================================
+                     VARIANCE PREVIEW
+                ================================================== --}}
 
                 <div class="cash-edit-field">
 
@@ -431,7 +541,9 @@
                 </div>
 
 
-                {{-- REMARKS --}}
+                {{-- =================================================
+                     REMARKS
+                ================================================== --}}
 
                 <div class="cash-edit-field full">
 
@@ -450,12 +562,15 @@
 
                 </div>
 
+
             </div>
 
         </div>
 
 
-        {{-- ACTIONS --}}
+        {{-- ========================================================
+             ACTIONS
+        ========================================================= --}}
 
         <div class="cash-edit-actions">
 
@@ -555,17 +670,6 @@ document.addEventListener(
             }
 
         }
-
-
-        expectedInput.addEventListener(
-            'input',
-            updateVariance
-        );
-
-        actualInput.addEventListener(
-            'input',
-            updateVariance
-        );
 
 
         updateVariance();

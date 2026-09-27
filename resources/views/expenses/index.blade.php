@@ -1886,6 +1886,8 @@
     .inventory-filter-button,
     .inventory-clear-button {
 
+
+
         width: 100%;
     }
 
