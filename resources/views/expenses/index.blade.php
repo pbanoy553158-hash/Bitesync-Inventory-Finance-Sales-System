@@ -15,7 +15,7 @@
     <div class="table-scroll">
       <table>
         <thead>
-          <tr>a
+          <tr>
             <th>Expense ID</th>
             <th>Category</th>
             <th>Date</th>
