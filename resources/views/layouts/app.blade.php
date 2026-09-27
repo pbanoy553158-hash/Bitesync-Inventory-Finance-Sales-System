@@ -1046,7 +1046,7 @@ label {
          Procurement = manage
     ================================================== -->
 
-    @if ($isAdmin || $isFinance || $isProcurement)
+    @if ($isAdmin || $isProcurement)
 
         <a
             href="{{ route('inventory.index') }}"
@@ -1099,7 +1099,7 @@ label {
          Procurement = manage
     ================================================== -->
 
-    @if ($isAdmin || $isFinance || $isProcurement)
+    @if ($isAdmin || $isProcurement)
 
         <a
             href="{{ route('suppliers.index') }}"
@@ -1260,17 +1260,31 @@ label {
      Procurement = profile
 ====================================================== -->
 
-@if ($isAdmin || $isProcurement)
+@if ($isAdmin || $isFinance || $isProcurement)
 
     <div class="admin-section">
 
         <div class="nav-title">
-            {{ $isProcurement ? 'My Account' : 'Administration' }}
+            {{ $isAdmin ? 'Administration' : 'My Account' }}
         </div>
 
 
         <nav class="nav">
 
+            <a
+                href="{{ route('profile.edit') }}"
+                class="nav-item {{ request()->routeIs('profile.*') ? 'active' : '' }}"
+            >
+
+                <span class="nav-icon">
+                    ♙
+                </span>
+
+                <span>
+                    Profile Settings
+                </span>
+
+            </a>
 
             @if ($isAdmin)
 
@@ -1292,27 +1306,6 @@ label {
                     </span>
 
                 </a>
-
-            @endif
-
-            @if ($isProcurement)
-
-                <a
-                    href="{{ route('profile.edit') }}"
-                    class="nav-item {{ request()->routeIs('profile.*') ? 'active' : '' }}"
-                >
-
-                    <span class="nav-icon">
-                        ♙
-                    </span>
-
-                    <span>
-                        Edit Profile
-                    </span>
-
-                </a>
-
-            @elseif ($isAdmin)
 
                 <!-- =================================================
                      SYSTEM SETTINGS

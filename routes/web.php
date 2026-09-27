@@ -179,7 +179,7 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::middleware(
-        'role:CEO/Admin,Finance,Procurement'
+        'role:CEO/Admin,Procurement'
     )->group(function () {
 
         Route::get('/inventory', [
@@ -622,7 +622,7 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::middleware(
-        'role:CEO/Admin,Finance,Procurement'
+        'role:CEO/Admin,Procurement'
     )->group(function () {
 
         Route::get('/suppliers', [
