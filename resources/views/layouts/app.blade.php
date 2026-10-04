@@ -167,7 +167,8 @@ body {
 
     z-index: 100;
 
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     box-shadow:
         5px 0 22px
