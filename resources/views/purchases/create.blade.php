@@ -275,7 +275,7 @@ if ($oldItems === null || empty($oldItems)) {
                     </div>
 
                     <div class="form-panel-icon">
-                        ₱
+                        {{ $currencySymbol }}
                     </div>
 
                 </div>
@@ -301,7 +301,7 @@ if ($oldItems === null || empty($oldItems)) {
                         </div>
 
                         <strong id="summarySubtotal">
-                            ₱0.00
+                            {{ $currencySymbol }}0.00
                         </strong>
 
                     </div>
@@ -318,7 +318,7 @@ if ($oldItems === null || empty($oldItems)) {
                         <div class="currency-input">
 
                             <span>
-                                ₱
+                                {{ $currencySymbol }}
                             </span>
 
                             <input
@@ -352,7 +352,7 @@ if ($oldItems === null || empty($oldItems)) {
                         </div>
 
                         <strong id="summaryTotal">
-                            ₱0.00
+                            {{ $currencySymbol }}0.00
                         </strong>
 
                     </div>
@@ -529,7 +529,7 @@ if ($oldItems === null || empty($oldItems)) {
                                         <div class="currency-input">
 
                                             <span>
-                                                ₱
+                                                {{ $currencySymbol }}
                                             </span>
 
                                             <input
@@ -553,7 +553,7 @@ if ($oldItems === null || empty($oldItems)) {
                                     <td>
 
                                         <div class="row-subtotal">
-                                            ₱0.00
+                                            {{ $currencySymbol }}0.00
                                         </div>
 
                                     </td>
@@ -668,7 +668,7 @@ if ($oldItems === null || empty($oldItems)) {
                     <div class="currency-input">
 
                         <span>
-                            ₱
+                            {{ $currencySymbol }}
                         </span>
 
                         <input
@@ -688,7 +688,7 @@ if ($oldItems === null || empty($oldItems)) {
                 <td>
 
                     <div class="row-subtotal">
-                        ₱0.00
+                        {{ $currencySymbol }}0.00
                     </div>
 
                 </td>
@@ -1727,7 +1727,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const number =
             Number(value) || 0;
 
-        return '₱' + number.toLocaleString(
+        return '{{ $currencySymbol }}' + number.toLocaleString(
             'en-PH',
             {
                 minimumFractionDigits: 2,

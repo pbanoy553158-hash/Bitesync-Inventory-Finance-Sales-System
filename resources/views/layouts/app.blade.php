@@ -670,6 +670,33 @@ body {
         40px;
 }
 
+.mobile-menu-bar,
+.sidebar-backdrop {
+    display: none;
+}
+
+
+.mobile-menu-toggle {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    color: var(--dark);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.mobile-menu-toggle-icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
 
 /* =========================================================
    PAGE CONTENT
@@ -925,6 +952,67 @@ label {
             35px;
     }
 
+    .sidebar {
+        width: 220px;
+        padding: 15px 10px;
+    }
+
+    .logo {
+        justify-content: flex-start;
+        padding: 3px 8px;
+        margin-bottom: 15px;
+    }
+
+    .logo-name,
+    .logo-subtitle,
+    .nav-title,
+    .user-info {
+        display: block;
+    }
+
+    .nav-item {
+        justify-content: flex-start;
+        padding: 6px 10px;
+    }
+
+    .nav-item span:not(.nav-icon),
+    .logout-button span:not(.nav-icon) {
+        display: inline;
+    }
+
+    .nav-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .nav-group[open] .nav-submenu {
+        position: static;
+        width: auto;
+        margin: 4px 0 4px 38px;
+        padding: 0 0 0 10px;
+        border: 0;
+        border-left: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .user-mini {
+        justify-content: flex-start;
+        padding: 6px 10px;
+    }
+
+    .logout-button {
+        justify-content: flex-start;
+        padding: 5px 10px;
+    }
+
+    .main {
+        width: calc(100% - 220px);
+        margin-left: 220px;
+        padding: 22px 14px 32px;
+    }
+
 }
 
 
@@ -933,6 +1021,58 @@ label {
 ========================================================= */
 
 @media (max-width: 600px) {
+
+    .sidebar {
+        width: min(280px, 85vw);
+        height: 100vh;
+        height: 100dvh;
+        transform: translateX(-100%);
+        transition: transform 0.22s ease;
+        will-change: transform;
+    }
+
+    .sidebar.is-open {
+        transform: translateX(0);
+    }
+
+    .sidebar-backdrop {
+        position: fixed;
+        z-index: 90;
+        inset: 0;
+        display: block;
+        background: rgba(20, 14, 10, 0.48);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.22s ease;
+    }
+
+    .sidebar-backdrop.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .mobile-menu-bar {
+        display: flex;
+        margin-bottom: 12px;
+    }
+
+    .main {
+        width: 100%;
+        margin-left: 0;
+        padding: 12px 14px 28px;
+    }
+
+    .nav-group[open] .nav-submenu {
+        position: static;
+        width: auto;
+        margin: 4px 0 4px 38px;
+        padding: 0 0 0 10px;
+        border: 0;
+        border-left: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
 
     .topbar {
 
@@ -986,7 +1126,7 @@ label {
      SIDEBAR
 ========================================================== -->
 
-<aside class="sidebar">
+<aside class="sidebar" id="appSidebar">
 
 
 <!-- =====================================================
@@ -1002,7 +1142,7 @@ label {
         </div>
 
         <div class="logo-subtitle">
-            Management System
+            {{ $businessName ?? 'Management System' }}
         </div>
 
     </div>
@@ -1256,7 +1396,7 @@ label {
         >
 
             <span class="nav-icon">
-                ₱
+                {{ $currencySymbol }}
             </span>
 
             <span>
@@ -1310,7 +1450,7 @@ label {
         >
 
             <span class="nav-icon">
-                ₱
+                {{ $currencySymbol }}
             </span>
 
             <span>
@@ -1407,8 +1547,8 @@ label {
                 ================================================== -->
 
                 <a
-                    href="#"
-                    class="nav-item"
+                    href="{{ route('admin.settings.edit') }}"
+                    class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}"
                 >
 
                     <span class="nav-icon">
@@ -1431,8 +1571,8 @@ label {
                 ================================================== -->
 
                 <a
-                    href="#"
-                    class="nav-item"
+                    href="{{ route('admin.audit-logs.index') }}"
+                    class="nav-item {{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}"
                 >
 
                     <span class="nav-icon">
@@ -1552,12 +1692,27 @@ label {
 
 </aside>
 
+<div class="sidebar-backdrop" data-sidebar-backdrop></div>
+
 
 <!-- =========================================================
      MAIN CONTENT
 ========================================================== -->
 
 <main class="main">
+
+    <div class="mobile-menu-bar">
+        <button
+            type="button"
+            class="mobile-menu-toggle"
+            data-sidebar-toggle
+            aria-controls="appSidebar"
+            aria-expanded="false"
+        >
+            <span class="mobile-menu-toggle-icon" aria-hidden="true">☰</span>
+            Menu
+        </button>
+    </div>
 
     <div class="page-content">
 
@@ -1572,6 +1727,37 @@ label {
 
 
 @stack('scripts')
+
+<script>
+    (() => {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = document.querySelector('[data-sidebar-toggle]');
+        const backdrop = document.querySelector('[data-sidebar-backdrop]');
+
+        if (!sidebar || !toggle || !backdrop) return;
+
+        const closeMenu = () => {
+            sidebar.classList.remove('is-open');
+            backdrop.classList.remove('is-visible');
+            toggle.setAttribute('aria-expanded', 'false');
+        };
+
+        toggle.addEventListener('click', () => {
+            const isOpen = sidebar.classList.toggle('is-open');
+            backdrop.classList.toggle('is-visible', isOpen);
+            toggle.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        backdrop.addEventListener('click', closeMenu);
+        sidebar.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') closeMenu();
+        });
+    })();
+</script>
 
 </body>
 

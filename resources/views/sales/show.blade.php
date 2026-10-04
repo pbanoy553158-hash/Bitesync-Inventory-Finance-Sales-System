@@ -334,7 +334,7 @@
                                             <td>
 
                                                 <span class="sale-price">
-                                                    ₱{{ number_format((float) $item->unit_price, 2) }}
+                                                    {{ $currencySymbol }}{{ number_format((float) $item->unit_price, 2) }}
                                                 </span>
 
                                             </td>
@@ -343,7 +343,7 @@
                                             <td>
 
                                                 <span class="sale-subtotal">
-                                                    ₱{{ number_format((float) $item->subtotal, 2) }}
+                                                    {{ $currencySymbol }}{{ number_format((float) $item->subtotal, 2) }}
                                                 </span>
 
                                             </td>
@@ -481,7 +481,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $sale->subtotal, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $sale->subtotal, 2) }}
                         </strong>
 
                     </div>
@@ -494,7 +494,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $sale->discount, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $sale->discount, 2) }}
                         </strong>
 
                     </div>
@@ -507,7 +507,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $sale->tax, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $sale->tax, 2) }}
                         </strong>
 
                     </div>
@@ -523,7 +523,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $sale->total, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $sale->total, 2) }}
                         </strong>
 
                     </div>
@@ -558,7 +558,7 @@
                             </span>
 
                             <strong>
-                                ₱{{ number_format((float) $sale->amount_received, 2) }}
+                                {{ $currencySymbol }}{{ number_format((float) $sale->amount_received, 2) }}
                             </strong>
 
                         </div>
@@ -571,7 +571,7 @@
                             </span>
 
                             <strong>
-                                ₱{{ number_format((float) $sale->change, 2) }}
+                                {{ $currencySymbol }}{{ number_format((float) $sale->change, 2) }}
                             </strong>
 
                         </div>

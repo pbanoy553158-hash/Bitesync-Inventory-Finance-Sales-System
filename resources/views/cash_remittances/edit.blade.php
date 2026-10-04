@@ -533,7 +533,7 @@
                         </div>
 
                         <div id="variancePreview">
-                            ₱0.00
+                            {{ $currencySymbol }}0.00
                         </div>
 
                     </div>
@@ -642,7 +642,7 @@ document.addEventListener(
 
             variancePreview.textContent =
                 prefix +
-                '₱' +
+                '{{ $currencySymbol }}' +
                 Math.abs(variance).toLocaleString(
                     'en-PH',
                     {

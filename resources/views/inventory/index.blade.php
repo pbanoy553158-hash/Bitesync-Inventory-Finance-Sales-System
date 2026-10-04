@@ -162,11 +162,11 @@
     <div class="inventory-stat-right">
 
         <div class="inventory-stat-icon">
-            ₱
+            {{ $currencySymbol }}
         </div>
 
         <div class="inventory-stat-value inventory-money">
-            ₱{{ number_format((float) $totalInventoryValue, 2) }}
+            {{ $currencySymbol }}{{ number_format((float) $totalInventoryValue, 2) }}
         </div>
 
     </div>
@@ -659,7 +659,7 @@
                     <td>
 
                         <span class="inventory-price">
-                            ₱{{ number_format((float) $item->unit_cost, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $item->unit_cost, 2) }}
                         </span>
 
                     </td>

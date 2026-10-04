@@ -381,7 +381,7 @@ $oldSaleItemsJson = json_encode(
                                 <div class="sales-product-card-bottom">
 
                                     <strong>
-                                        ₱{{ number_format($product->selling_price, 2) }}
+                                        {{ $currencySymbol }}{{ number_format($product->selling_price, 2) }}
                                     </strong>
 
                                     <span class="sales-add-small">
@@ -563,7 +563,7 @@ $oldSaleItemsJson = json_encode(
                             <div class="sales-money-input">
 
                                 <span>
-                                    ₱
+                                    {{ $currencySymbol }}
                                 </span>
 
                                 <input
@@ -590,7 +590,7 @@ $oldSaleItemsJson = json_encode(
                             <div class="sales-money-input">
 
                                 <span>
-                                    ₱
+                                    {{ $currencySymbol }}
                                 </span>
 
                                 <input
@@ -621,7 +621,7 @@ $oldSaleItemsJson = json_encode(
                             </span>
 
                             <strong id="summarySubtotal">
-                                ₱0.00
+                                {{ $currencySymbol }}0.00
                             </strong>
 
                         </div>
@@ -634,7 +634,7 @@ $oldSaleItemsJson = json_encode(
                             </span>
 
                             <strong id="summaryDiscount">
-                                -₱0.00
+                                -{{ $currencySymbol }}0.00
                             </strong>
 
                         </div>
@@ -647,7 +647,7 @@ $oldSaleItemsJson = json_encode(
                             </span>
 
                             <strong id="summaryTax">
-                                +₱0.00
+                                +{{ $currencySymbol }}0.00
                             </strong>
 
                         </div>
@@ -663,7 +663,7 @@ $oldSaleItemsJson = json_encode(
                             </span>
 
                             <strong id="summaryTotal">
-                                ₱0.00
+                                {{ $currencySymbol }}0.00
                             </strong>
 
                         </div>
@@ -682,7 +682,7 @@ $oldSaleItemsJson = json_encode(
                         <div class="sales-received-input">
 
                             <span>
-                                ₱
+                                {{ $currencySymbol }}
                             </span>
 
                             <input
@@ -722,7 +722,7 @@ $oldSaleItemsJson = json_encode(
                         </div>
 
                         <strong id="summaryChange">
-                            ₱0.00
+                            {{ $currencySymbol }}0.00
                         </strong>
 
                     </div>
@@ -2204,7 +2204,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const number =
             Number(value) || 0;
 
-        return '₱' +
+        return '{{ $currencySymbol }}' +
             number.toLocaleString(
                 'en-PH',
                 {

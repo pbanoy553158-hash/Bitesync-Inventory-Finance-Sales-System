@@ -70,8 +70,8 @@
                 <div class="expense-stat-note">Average expense amount</div>
             </div>
             <div class="expense-stat-right">
-                <div class="expense-stat-icon">₱</div>
-                <div class="expense-stat-value expense-money">₱{{ number_format((float) ($averageExpense ?? 0), 2) }}</div>
+                <div class="expense-stat-icon">{{ $currencySymbol }}</div>
+                <div class="expense-stat-value expense-money">{{ $currencySymbol }}{{ number_format((float) ($averageExpense ?? 0), 2) }}</div>
             </div>
         </div>
     </section>
@@ -157,7 +157,7 @@
                             <td>{{ $expense->expense_date ? $expense->expense_date->format('M d, Y') : '—' }}</td>
                             <td>{{ $expense->recorded_by ?? ($expense->user?->name ?? '—') }}</td>
                             <td>{{ $expense->reference_no ?: '—' }}</td>
-                            <td class="expense-amount">₱{{ number_format((float) $expense->amount, 2) }}</td>
+                            <td class="expense-amount">{{ $currencySymbol }}{{ number_format((float) $expense->amount, 2) }}</td>
                             <td><span class="expense-status {{ $statusClass }}">{{ $status }}</span></td>
                             <td class="expense-action-cell">
                                 <div class="expense-inline-actions">
@@ -174,7 +174,7 @@
                         <tr>
                             <td colspan="8">
                                 <div class="expense-empty-state">
-                                    <div class="expense-empty-icon">₱</div>
+                                    <div class="expense-empty-icon">{{ $currencySymbol }}</div>
                                     <h3>No expenses recorded yet.</h3>
                                     <p>Start by adding your first expense entry.</p>
                                 </div>

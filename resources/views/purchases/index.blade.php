@@ -687,7 +687,7 @@
 
                                 <span class="purchases-total">
 
-                                    ₱{{ number_format((float) $purchase->total, 2) }}
+                                    {{ $currencySymbol }}{{ number_format((float) $purchase->total, 2) }}
 
                                 </span>
 

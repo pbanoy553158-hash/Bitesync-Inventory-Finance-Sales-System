@@ -358,7 +358,7 @@
                                         type="number"
                                         id="minimum_stock"
                                         name="minimum_stock"
-                                        value="{{ old('minimum_stock', 0) }}"
+                                        value="{{ old('minimum_stock', $systemSettings['default_minimum_stock'] ?? 0) }}"
                                         min="0"
                                         step="0.01"
                                         required
@@ -419,7 +419,7 @@
                                 <div class="currency-input">
 
                                     <span>
-                                        ₱
+                                        {{ $currencySymbol }}
                                     </span>
 
                                     <input

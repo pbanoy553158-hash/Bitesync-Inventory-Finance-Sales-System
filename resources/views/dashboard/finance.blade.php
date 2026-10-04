@@ -721,7 +721,7 @@
     <div class="finance-notice">
 
         <div class="finance-notice-icon">
-            ₱
+            {{ $currencySymbol }}
         </div>
 
         <div>
@@ -767,11 +767,11 @@
             <div class="dashboard-kpi-right">
 
                 <div class="dashboard-kpi-icon green">
-                    ₱
+                    {{ $currencySymbol }}
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format(
+                    {{ $currencySymbol }}{{ number_format(
                         (float) ($totalSales ?? 0),
                         2
                     ) }}
@@ -807,7 +807,7 @@
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format(
+                    {{ $currencySymbol }}{{ number_format(
                         (float) ($totalExpenses ?? 0),
                         2
                     ) }}
@@ -839,11 +839,11 @@
             <div class="dashboard-kpi-right">
 
                 <div class="dashboard-kpi-icon blue">
-                    ₱
+                    {{ $currencySymbol }}
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format(
+                    {{ $currencySymbol }}{{ number_format(
                         (float) ($netAmount ?? 0),
                         2
                     ) }}
@@ -888,7 +888,7 @@
 
                 <div class="dashboard-kpi-value money">
 
-                    ₱{{ number_format(
+                    {{ $currencySymbol }}{{ number_format(
                         abs($variance),
                         2
                     ) }}
@@ -1005,7 +1005,7 @@
 
                         <div class="finance-highlight-value">
 
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 (float) ($netAmount ?? 0),
                                 2
                             ) }}
@@ -1024,7 +1024,7 @@
                         </span>
 
                         <span class="finance-value orange">
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 (float) ($totalPurchases ?? 0),
                                 2
                             ) }}
@@ -1042,7 +1042,7 @@
                         </span>
 
                         <span class="finance-value red">
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 (float) ($totalExpenses ?? 0),
                                 2
                             ) }}
@@ -1281,7 +1281,7 @@
 
                                         <span class="dashboard-amount">
 
-                                            ₱{{ number_format(
+                                            {{ $currencySymbol }}{{ number_format(
                                                 (float) $sale->total,
                                                 2
                                             ) }}
@@ -1305,7 +1305,7 @@
                 <div class="dashboard-empty">
 
                     <div class="dashboard-empty-icon">
-                        ₱
+                        {{ $currencySymbol }}
                     </div>
 
                     <div class="dashboard-empty-title">
@@ -1418,7 +1418,7 @@
 
                                         <span class="dashboard-amount">
 
-                                            ₱{{ number_format(
+                                            {{ $currencySymbol }}{{ number_format(
                                                 (float) $expense->amount,
                                                 2
                                             ) }}
@@ -1913,7 +1913,7 @@ document.addEventListener(
                                         function(context) {
 
                                             return (
-                                                ' Sales: ₱' +
+                                                ' Sales: {{ $currencySymbol }}' +
                                                 Number(
                                                     context.parsed.y
                                                 ).toLocaleString(
@@ -2044,7 +2044,7 @@ document.addEventListener(
                                         function(value) {
 
                                             return (
-                                                '₱' +
+                                                '{{ $currencySymbol }}' +
                                                 Number(value)
                                                     .toLocaleString(
                                                         'en-PH',
@@ -2159,7 +2159,7 @@ document.addEventListener(
                                         function(context) {
 
                                             return (
-                                                ' Sales: ₱' +
+                                                ' Sales: {{ $currencySymbol }}' +
                                                 Number(
                                                     context.parsed.x
                                                 ).toLocaleString(
@@ -2197,7 +2197,7 @@ document.addEventListener(
                                     callback:
                                         function(value) {
 
-                                            return '₱' +
+                                            return '{{ $currencySymbol }}' +
                                                 Number(value)
                                                     .toLocaleString(
                                                         'en-PH',
@@ -2403,7 +2403,7 @@ document.addEventListener(
                                             return (
                                                 ' ' +
                                                 context.label +
-                                                ': ₱' +
+                                                ': {{ $currencySymbol }}' +
                                                 value.toLocaleString(
                                                     'en-PH',
                                                     {
@@ -2473,7 +2473,7 @@ document.addEventListener(
 
 
                                     ctx.fillText(
-                                        '₱' +
+                                        '{{ $currencySymbol }}' +
                                         totalExpenses.toLocaleString(
                                             'en-PH',
                                             {

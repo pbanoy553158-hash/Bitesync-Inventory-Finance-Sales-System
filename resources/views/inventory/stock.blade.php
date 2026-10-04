@@ -1965,7 +1965,7 @@ CONTROLLED STOCK OPERATIONS
                                     <td>
 
                                         <div class="receipt-total item-total">
-                                            ₱0.00
+                                            {{ $currencySymbol }}0.00
                                         </div>
 
                                     </td>
@@ -2014,7 +2014,7 @@ CONTROLLED STOCK OPERATIONS
                         class="receipt-grand-total-value"
                         id="receiptGrandTotal"
                     >
-                        ₱0.00
+                        {{ $currencySymbol }}0.00
                     </span>
 
                 </div>
@@ -2967,7 +2967,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function formatCurrency(value) {
 
-        return '₱' +
+        return '{{ $currencySymbol }}' +
             Number(value || 0)
                 .toLocaleString(
                     'en-PH',
@@ -3630,7 +3630,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td>
 
                         <div class="receipt-total item-total">
-                            ₱0.00
+                            {{ $currencySymbol }}0.00
                         </div>
 
                     </td>

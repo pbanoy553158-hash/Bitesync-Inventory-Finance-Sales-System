@@ -793,7 +793,7 @@
             <p class="brand-description">
                 A centralized workspace for managing inventory,
                 procurement, sales records, expenses, and business
-                reports for The Crazy Bite Co.
+                reports for {{ rtrim($businessName ?? 'The Crazy Bite Co.', '.') }}.
             </p>
 
             <div class="features">
@@ -1014,7 +1014,7 @@
                 <div>
                     <strong>BiteSync</strong>
                     &nbsp;•&nbsp;
-                    The Crazy Bite Co.
+                    {{ $businessName ?? 'The Crazy Bite Co.' }}
                 </div>
 
             </div>

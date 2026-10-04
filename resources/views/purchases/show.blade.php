@@ -794,7 +794,7 @@
 
                                         <td data-label="Unit Cost">
 
-                                            ₱{{ number_format((float) $item->unit_cost, 2) }}
+                                            {{ $currencySymbol }}{{ number_format((float) $item->unit_cost, 2) }}
 
                                         </td>
 
@@ -804,7 +804,7 @@
                                         <td data-label="Subtotal">
 
                                             <strong>
-                                                ₱{{ number_format((float) $item->subtotal, 2) }}
+                                                {{ $currencySymbol }}{{ number_format((float) $item->subtotal, 2) }}
                                             </strong>
 
                                         </td>
@@ -1173,7 +1173,7 @@
                     </div>
 
                     <div class="form-panel-icon">
-                        ₱
+                        {{ $currencySymbol }}
                     </div>
 
                 </div>
@@ -1197,7 +1197,7 @@
                         </div>
 
                         <strong>
-                            ₱{{ number_format((float) $purchase->subtotal, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $purchase->subtotal, 2) }}
                         </strong>
 
                     </div>
@@ -1218,7 +1218,7 @@
                         </div>
 
                         <strong>
-                            ₱{{ number_format((float) $purchase->tax, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $purchase->tax, 2) }}
                         </strong>
 
                     </div>
@@ -1239,7 +1239,7 @@
                         </div>
 
                         <strong>
-                            ₱{{ number_format((float) $purchase->total, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $purchase->total, 2) }}
                         </strong>
 
                     </div>

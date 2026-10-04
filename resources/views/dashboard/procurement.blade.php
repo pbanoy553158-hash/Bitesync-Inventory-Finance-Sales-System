@@ -1062,7 +1062,7 @@
                         </div>
 
                         <div class="procurement-highlight-value">
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 (float) ($totalPurchases ?? 0),
                                 2
                             ) }}
@@ -1080,7 +1080,7 @@
                         </span>
 
                         <span class="procurement-value">
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 (float) ($monthlyPurchases ?? 0),
                                 2
                             ) }}
@@ -1332,7 +1332,7 @@
                                     <td>
 
                                         <span class="dashboard-amount">
-                                            ₱{{ number_format(
+                                            {{ $currencySymbol }}{{ number_format(
                                                 (float) $purchase->total,
                                                 2
                                             ) }}
@@ -1739,7 +1739,7 @@ document.addEventListener(
                                         function(context) {
 
                                             return (
-                                                ' Purchases: ₱' +
+                                                ' Purchases: {{ $currencySymbol }}' +
                                                 Number(
                                                     context.parsed.y
                                                 ).toLocaleString(
@@ -1807,7 +1807,7 @@ document.addEventListener(
                                     callback:
                                         function(value) {
 
-                                            return '₱' +
+                                            return '{{ $currencySymbol }}' +
                                                 Number(value)
                                                     .toLocaleString(
                                                         'en-PH',

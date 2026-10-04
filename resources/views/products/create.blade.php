@@ -276,7 +276,7 @@
                     <div class="product-price-input">
 
                         <span>
-                            ₱
+                            {{ $currencySymbol }}
                         </span>
 
                         <input

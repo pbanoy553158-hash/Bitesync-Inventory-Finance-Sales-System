@@ -338,7 +338,7 @@
                 <div class="form-panel-header">
 
                     <div class="form-panel-icon">
-                        ₱
+                        {{ $currencySymbol }}
                     </div>
 
                     <div>
@@ -365,7 +365,7 @@
                         </span>
 
                         <strong id="subtotalDisplay">
-                            ₱0.00
+                            {{ $currencySymbol }}0.00
                         </strong>
 
                     </div>
@@ -380,7 +380,7 @@
                         <div class="summary-tax-input">
 
                             <span>
-                                ₱
+                                {{ $currencySymbol }}
                             </span>
 
                             <input
@@ -408,7 +408,7 @@
                         </span>
 
                         <strong id="totalDisplay">
-                            ₱0.00
+                            {{ $currencySymbol }}0.00
                         </strong>
 
                     </div>
@@ -572,7 +572,7 @@
                                         <div class="cost-input">
 
                                             <span>
-                                                ₱
+                                                {{ $currencySymbol }}
                                             </span>
 
                                             <input
@@ -596,7 +596,7 @@
                                     <td>
 
                                         <span class="item-subtotal">
-                                            ₱0.00
+                                            {{ $currencySymbol }}0.00
                                         </span>
 
                                     </td>
@@ -1515,7 +1515,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function formatMoney(value) {
 
-        return '₱' +
+        return '{{ $currencySymbol }}' +
             Number(value || 0).toLocaleString(
                 'en-PH',
                 {
@@ -1780,7 +1780,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="cost-input">
 
                     <span>
-                        ₱
+                        {{ $currencySymbol }}
                     </span>
 
                     <input
@@ -1800,7 +1800,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <td>
 
                 <span class="item-subtotal">
-                    ₱0.00
+                    {{ $currencySymbol }}0.00
                 </span>
 
             </td>

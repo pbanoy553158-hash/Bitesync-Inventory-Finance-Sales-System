@@ -755,7 +755,7 @@ $updatedDate = $expense->updated_at
             </div>
 
             <div class="form-panel-icon">
-                ₱
+                {{ $currencySymbol }}
             </div>
 
         </div>
@@ -863,7 +863,7 @@ $updatedDate = $expense->updated_at
             </div>
 
             <div class="form-panel-icon">
-                ₱
+                {{ $currencySymbol }}
             </div>
 
         </div>
@@ -889,7 +889,7 @@ $updatedDate = $expense->updated_at
                         </div>
 
                         <div class="amount-display-value">
-                            ₱{{ number_format((float) $expense->amount, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $expense->amount, 2) }}
                         </div>
 
                     </div>

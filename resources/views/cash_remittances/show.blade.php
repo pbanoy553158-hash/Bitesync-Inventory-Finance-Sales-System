@@ -743,7 +743,7 @@
                 </div>
 
                 <div class="cash-panel-icon">
-                    ₱
+                    {{ $currencySymbol }}
                 </div>
             </div>
 
@@ -809,7 +809,7 @@
                 </div>
 
                 <div class="cash-panel-icon">
-                    ₱
+                    {{ $currencySymbol }}
                 </div>
             </div>
 
@@ -823,7 +823,7 @@
                         </span>
 
                         <span class="amount-value">
-                            ₱{{ number_format($expected, 2) }}
+                            {{ $currencySymbol }}{{ number_format($expected, 2) }}
                         </span>
                     </div>
 
@@ -833,7 +833,7 @@
                         </span>
 
                         <span class="amount-value">
-                            ₱{{ number_format($actual, 2) }}
+                            {{ $currencySymbol }}{{ number_format($actual, 2) }}
                         </span>
                     </div>
 
@@ -851,9 +851,9 @@
 
                             <span class="variance-value">
                                 @if($variance == 0)
-                                    ₱0.00
+                                    {{ $currencySymbol }}0.00
                                 @else
-                                    {{ $variancePrefix }}₱{{ number_format(abs($variance), 2) }}
+                                    {{ $variancePrefix }}{{ $currencySymbol }}{{ number_format(abs($variance), 2) }}
                                 @endif
                             </span>
 

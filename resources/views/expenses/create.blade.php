@@ -799,7 +799,7 @@
                     </div>
 
                     <div class="form-panel-icon">
-                        ₱
+                        {{ $currencySymbol }}
                     </div>
 
                 </div>
@@ -969,7 +969,7 @@
                     </div>
 
                     <div class="form-panel-icon">
-                        ₱
+                        {{ $currencySymbol }}
                     </div>
 
                 </div>
@@ -991,7 +991,7 @@
                             <div class="amount-wrapper">
 
                                 <span class="amount-prefix">
-                                    ₱
+                                    {{ $currencySymbol }}
                                 </span>
 
                                 <input

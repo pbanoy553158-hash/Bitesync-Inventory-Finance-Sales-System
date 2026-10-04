@@ -345,13 +345,13 @@
                             </span>
 
                             <div class="report-summary-icon">
-                                ₱
+                                {{ $currencySymbol }}
                             </div>
 
                         </div>
 
                         <strong>
-                            ₱{{ number_format((float) $totalSales, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $totalSales, 2) }}
                         </strong>
 
                         <small>
@@ -384,7 +384,7 @@
                         </div>
 
                         <strong>
-                            ₱{{ number_format((float) $totalPurchases, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $totalPurchases, 2) }}
                         </strong>
 
                         <small>
@@ -411,13 +411,13 @@
                             </span>
 
                             <div class="report-summary-icon">
-                                ₱
+                                {{ $currencySymbol }}
                             </div>
 
                         </div>
 
                         <strong>
-                            ₱{{ number_format((float) $totalExpenses, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $totalExpenses, 2) }}
                         </strong>
 
                         <small>
@@ -454,7 +454,7 @@
                         </div>
 
                         <strong>
-                            ₱{{ number_format((float) $netAmount, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $netAmount, 2) }}
                         </strong>
 
                         <small>
@@ -516,13 +516,13 @@
                             </span>
 
                             <div class="report-summary-icon">
-                                ₱
+                                {{ $currencySymbol }}
                             </div>
 
                         </div>
 
                         <strong>
-                            ₱{{ number_format((float) $inventoryValue, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $inventoryValue, 2) }}
                         </strong>
 
                         <small>
@@ -594,7 +594,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $totalSales, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $totalSales, 2) }}
                         </strong>
 
                     </div>
@@ -607,7 +607,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $totalPurchases, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $totalPurchases, 2) }}
                         </strong>
 
                     </div>
@@ -620,7 +620,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $totalExpenses, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $totalExpenses, 2) }}
                         </strong>
 
                     </div>
@@ -633,7 +633,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $netAmount, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $netAmount, 2) }}
                         </strong>
 
                     </div>
@@ -667,7 +667,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 $salesCount > 0
                                     ? $totalSales / $salesCount
                                     : 0,
@@ -706,7 +706,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 $expenseCount > 0
                                     ? $totalExpenses / $expenseCount
                                     : 0,
@@ -795,7 +795,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $totalPurchases, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $totalPurchases, 2) }}
                         </strong>
 
                     </div>
@@ -844,7 +844,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 $purchaseCount > 0
                                     ? $totalPurchases / $purchaseCount
                                     : 0,
@@ -943,7 +943,7 @@
                                         </td>
 
                                         <td class="text-right amount-cell">
-                                            ₱{{ number_format((float) $daily->total_sales, 2) }}
+                                            {{ $currencySymbol }}{{ number_format((float) $daily->total_sales, 2) }}
                                         </td>
 
                                     </tr>
@@ -962,7 +962,7 @@
                                     </td>
 
                                     <td class="text-right">
-                                        ₱{{ number_format((float) $totalSales, 2) }}
+                                        {{ $currencySymbol }}{{ number_format((float) $totalSales, 2) }}
                                     </td>
 
                                 </tr>
@@ -1063,7 +1063,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $inventoryValue, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $inventoryValue, 2) }}
                         </strong>
 
                         <small>
@@ -1215,7 +1215,7 @@
 
                                         <td class="text-right amount-cell">
 
-                                            ₱{{ number_format(
+                                            {{ $currencySymbol }}{{ number_format(
                                                 (float) $expense->amount,
                                                 2
                                             ) }}
@@ -1234,7 +1234,7 @@
                                     </td>
 
                                     <td class="text-right">
-                                        ₱{{ number_format((float) $totalExpenses, 2) }}
+                                        {{ $currencySymbol }}{{ number_format((float) $totalExpenses, 2) }}
                                     </td>
 
                                 </tr>
@@ -1317,7 +1317,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $expectedRemittance, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $expectedRemittance, 2) }}
                         </strong>
 
                     </div>
@@ -1330,7 +1330,7 @@
                         </span>
 
                         <strong>
-                            ₱{{ number_format((float) $actualRemittance, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $actualRemittance, 2) }}
                         </strong>
 
                     </div>
@@ -1353,7 +1353,7 @@
                                 @endif
                             "
                         >
-                            ₱{{ number_format((float) $remittanceVariance, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $remittanceVariance, 2) }}
                         </strong>
 
                     </div>
@@ -1424,7 +1424,7 @@
 
                                         <td class="text-right amount-cell">
 
-                                            ₱{{ number_format(
+                                            {{ $currencySymbol }}{{ number_format(
                                                 (float) $remittance->actual_amount,
                                                 2
                                             ) }}

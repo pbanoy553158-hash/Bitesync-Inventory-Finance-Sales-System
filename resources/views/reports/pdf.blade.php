@@ -812,7 +812,7 @@ PURCHASING SUMMARY
 
 
         <div class="section-icon">
-            ₱
+            {{ $currencySymbol }}
         </div>
 
     </div>
@@ -853,7 +853,7 @@ PURCHASING SUMMARY
 
                     <td class="amount">
 
-                        ₱{{ number_format(
+                        {{ $currencySymbol }}{{ number_format(
                             (float) $totalPurchases,
                             2
                         ) }}
@@ -980,7 +980,7 @@ INVENTORY SUMMARY
 
                     <td class="amount">
 
-                        ₱{{ number_format(
+                        {{ $currencySymbol }}{{ number_format(
                             (float) $inventoryValue,
                             2
                         ) }}
@@ -1222,7 +1222,7 @@ FINANCIAL SUMMARY
 
 
         <div class="section-icon">
-            ₱
+            {{ $currencySymbol }}
         </div>
 
     </div>
@@ -1263,7 +1263,7 @@ FINANCIAL SUMMARY
 
                     <td class="amount">
 
-                        ₱{{ number_format(
+                        {{ $currencySymbol }}{{ number_format(
                             (float) $totalSales,
                             2
                         ) }}
@@ -1285,7 +1285,7 @@ FINANCIAL SUMMARY
 
                     <td class="amount">
 
-                        ₱{{ number_format(
+                        {{ $currencySymbol }}{{ number_format(
                             (float) $totalPurchases,
                             2
                         ) }}
@@ -1307,7 +1307,7 @@ FINANCIAL SUMMARY
 
                     <td class="amount">
 
-                        ₱{{ number_format(
+                        {{ $currencySymbol }}{{ number_format(
                             (float) $totalExpenses,
                             2
                         ) }}
@@ -1334,7 +1334,7 @@ FINANCIAL SUMMARY
                             : 'negative' }}"
                     >
 
-                        ₱{{ number_format(
+                        {{ $currencySymbol }}{{ number_format(
                             (float) $netAmount,
                             2
                         ) }}
@@ -1438,7 +1438,7 @@ INVENTORY SUMMARY
 
                     <td class="amount">
 
-                        ₱{{ number_format(
+                        {{ $currencySymbol }}{{ number_format(
                             (float) $inventoryValue,
                             2
                         ) }}
@@ -1518,7 +1518,7 @@ CASH REMITTANCE
 
 
         <div class="section-icon">
-            ₱
+            {{ $currencySymbol }}
         </div>
 
     </div>
@@ -1559,7 +1559,7 @@ CASH REMITTANCE
 
                     <td class="amount">
 
-                        ₱{{ number_format(
+                        {{ $currencySymbol }}{{ number_format(
                             (float) $expectedRemittance,
                             2
                         ) }}
@@ -1581,7 +1581,7 @@ CASH REMITTANCE
 
                     <td class="amount">
 
-                        ₱{{ number_format(
+                        {{ $currencySymbol }}{{ number_format(
                             (float) $actualRemittance,
                             2
                         ) }}
@@ -1608,7 +1608,7 @@ CASH REMITTANCE
                             : 'negative' }}"
                     >
 
-                        ₱{{ number_format(
+                        {{ $currencySymbol }}{{ number_format(
                             (float) $remittanceVariance,
                             2
                         ) }}
@@ -1727,7 +1727,7 @@ DAILY SALES
 
                         <td class="amount">
 
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 (float) $daily->total_sales,
                                 2
                             ) }}
@@ -1792,7 +1792,7 @@ RECENT EXPENSES
 
 
         <div class="section-icon">
-            ₱
+            {{ $currencySymbol }}
         </div>
 
     </div>
@@ -1870,7 +1870,7 @@ RECENT EXPENSES
 
                         <td class="amount">
 
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 (float) $expense->amount,
                                 2
                             ) }}
@@ -1945,7 +1945,7 @@ RECENT CASH REMITTANCES
 
 
         <div class="section-icon">
-            ₱
+            {{ $currencySymbol }}
         </div>
 
     </div>
@@ -2025,7 +2025,7 @@ RECENT CASH REMITTANCES
 
                         <td class="amount">
 
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 $expected,
                                 2
                             ) }}
@@ -2035,7 +2035,7 @@ RECENT CASH REMITTANCES
 
                         <td class="amount">
 
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 $actual,
                                 2
                             ) }}
@@ -2050,7 +2050,7 @@ RECENT CASH REMITTANCES
                                 : 'negative' }}"
                         >
 
-                            ₱{{ number_format(
+                            {{ $currencySymbol }}{{ number_format(
                                 $variance,
                                 2
                             ) }}

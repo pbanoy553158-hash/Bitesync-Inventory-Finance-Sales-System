@@ -431,7 +431,7 @@
                                 <div class="currency-input">
 
                                     <span>
-                                        ₱
+                                        {{ $currencySymbol }}
                                     </span>
 
                                     <input

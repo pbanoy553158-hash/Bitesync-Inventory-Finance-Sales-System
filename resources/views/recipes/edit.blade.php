@@ -169,7 +169,7 @@
                     <span>
                         Selling Price:
                         <strong>
-                            ₱{{ number_format((float) $product->selling_price, 2) }}
+                            {{ $currencySymbol }}{{ number_format((float) $product->selling_price, 2) }}
                         </strong>
                     </span>
 
@@ -268,7 +268,7 @@
         <div class="recipe-summary-card">
 
             <div class="recipe-summary-icon">
-                ₱
+                {{ $currencySymbol }}
             </div>
 
             <div class="recipe-summary-content">
@@ -278,7 +278,7 @@
                 </div>
 
                 <div class="recipe-summary-value recipe-summary-money">
-                    ₱{{ number_format((float) $product->selling_price, 2) }}
+                    {{ $currencySymbol }}{{ number_format((float) $product->selling_price, 2) }}
                 </div>
 
             </div>

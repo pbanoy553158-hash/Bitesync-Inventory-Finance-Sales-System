@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\CashRemittanceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\SystemSettingsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -112,6 +114,21 @@ Route::middleware('auth')->group(function () {
             UserController::class,
             'index'
         ])->name('admin.users.index');
+
+        Route::get('/admin/settings', [
+            SystemSettingsController::class,
+            'edit'
+        ])->name('admin.settings.edit');
+
+        Route::get('/admin/audit-logs', [
+            AuditLogController::class,
+            'index'
+        ])->name('admin.audit-logs.index');
+
+        Route::put('/admin/settings', [
+            SystemSettingsController::class,
+            'update'
+        ])->name('admin.settings.update');
 
         Route::post('/admin/users/{user}/approve', [
             UserController::class,

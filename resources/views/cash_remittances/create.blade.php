@@ -135,7 +135,7 @@
                 </div>
 
                 <div class="form-panel-icon">
-                    ₱
+                    {{ $currencySymbol }}
                 </div>
 
             </div>
@@ -227,7 +227,7 @@
                         <div class="currency-input">
 
                             <span>
-                                ₱
+                                {{ $currencySymbol }}
                             </span>
 
                             <input
@@ -263,7 +263,7 @@
                         <div class="currency-input">
 
                             <span>
-                                ₱
+                                {{ $currencySymbol }}
                             </span>
 
                             <input
@@ -313,7 +313,7 @@
                         <div class="variance-preview">
 
                             <strong id="variancePreview">
-                                ₱0.00
+                                {{ $currencySymbol }}0.00
                             </strong>
 
                         </div>
@@ -1006,7 +1006,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         variancePreview.textContent =
             prefix +
-            '₱' +
+            '{{ $currencySymbol }}' +
             Math.abs(variance).toLocaleString(
                 'en-PH',
                 {

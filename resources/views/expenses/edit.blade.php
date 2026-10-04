@@ -808,7 +808,7 @@ $expenseStatus = old('status', $expense->status ?? 'Recorded');
                 </div>
 
                 <div class="form-panel-icon">
-                    ₱
+                    {{ $currencySymbol }}
                 </div>
 
             </div>
@@ -978,7 +978,7 @@ $expenseStatus = old('status', $expense->status ?? 'Recorded');
                 </div>
 
                 <div class="form-panel-icon">
-                    ₱
+                    {{ $currencySymbol }}
                 </div>
 
             </div>
@@ -1000,7 +1000,7 @@ $expenseStatus = old('status', $expense->status ?? 'Recorded');
                         <div class="amount-wrapper">
 
                             <span class="amount-prefix">
-                                ₱
+                                {{ $currencySymbol }}
                             </span>
 
                             <input

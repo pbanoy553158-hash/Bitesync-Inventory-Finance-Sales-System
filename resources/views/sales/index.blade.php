@@ -57,7 +57,7 @@ $statusIcons = [
 
 $paymentIcons = [
 
-    'Cash' => '₱',
+    'Cash' => $currencySymbol,
 
     'GCash' => 'G',
 
@@ -244,11 +244,11 @@ $saleStatuses = array_keys($statusClasses);
         <div class="sale-stat-right">
 
             <div class="sale-stat-icon">
-                ₱
+                {{ $currencySymbol }}
             </div>
 
             <div class="sale-stat-value sale-revenue-value">
-                ₱{{ number_format((float) $stats['revenue'], 2) }}
+                {{ $currencySymbol }}{{ number_format((float) $stats['revenue'], 2) }}
             </div>
 
         </div>
@@ -498,7 +498,7 @@ $saleStatuses = array_keys($statusClasses);
 
                         $paymentIcon =
                             $paymentIcons[$sale->payment_method]
-                            ?? '₱';
+                            ?? $currencySymbol;
 
 
                         $itemCount =
@@ -571,7 +571,7 @@ $saleStatuses = array_keys($statusClasses);
 
                             <span class="sale-price">
 
-                                ₱{{ number_format(
+                                {{ $currencySymbol }}{{ number_format(
                                     (float) $sale->total,
                                     2
                                 ) }}
@@ -673,7 +673,7 @@ $saleStatuses = array_keys($statusClasses);
                         >
 
                             <div class="sale-empty-icon">
-                                ₱
+                                {{ $currencySymbol }}
                             </div>
 
 

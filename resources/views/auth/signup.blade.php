@@ -326,7 +326,7 @@
             Already have an account?
             <a href="{{ route('login') }}">Sign in</a>
         </div>
-        <div class="footer">BiteSync &nbsp;•&nbsp; The Crazy Bite Co.</div>
+        <div class="footer">BiteSync &nbsp;•&nbsp; {{ $businessName ?? 'The Crazy Bite Co.' }}</div>
     </main>
     <script>
         document.querySelectorAll('.password-toggle').forEach((toggle) => {

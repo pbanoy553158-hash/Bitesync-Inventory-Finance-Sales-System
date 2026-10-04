@@ -922,11 +922,11 @@
             <div class="dashboard-kpi-right">
 
                 <div class="dashboard-kpi-icon">
-                    ₱
+                    {{ $currencySymbol }}
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format($totalSales ?? 0, 2) }}
+                    {{ $currencySymbol }}{{ number_format($totalSales ?? 0, 2) }}
                 </div>
 
             </div>
@@ -962,7 +962,7 @@
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format($totalPurchases ?? 0, 2) }}
+                    {{ $currencySymbol }}{{ number_format($totalPurchases ?? 0, 2) }}
                 </div>
 
             </div>
@@ -998,7 +998,7 @@
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format($totalExpenses ?? 0, 2) }}
+                    {{ $currencySymbol }}{{ number_format($totalExpenses ?? 0, 2) }}
                 </div>
 
             </div>
@@ -1030,11 +1030,11 @@
             <div class="dashboard-kpi-right">
 
                 <div class="dashboard-kpi-icon purple">
-                    ₱
+                    {{ $currencySymbol }}
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format($totalRemittances ?? 0, 2) }}
+                    {{ $currencySymbol }}{{ number_format($totalRemittances ?? 0, 2) }}
                 </div>
 
             </div>
@@ -1070,7 +1070,7 @@
                 </div>
 
                 <div class="dashboard-kpi-value money">
-                    ₱{{ number_format($inventoryValue ?? 0, 2) }}
+                    {{ $currencySymbol }}{{ number_format($inventoryValue ?? 0, 2) }}
                 </div>
 
             </div>
@@ -1160,7 +1160,7 @@
                         </span>
 
                         <span class="financial-value positive">
-                            ₱{{ number_format($totalSales ?? 0, 2) }}
+                            {{ $currencySymbol }}{{ number_format($totalSales ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1173,7 +1173,7 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($totalPurchases ?? 0, 2) }}
+                            {{ $currencySymbol }}{{ number_format($totalPurchases ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1186,7 +1186,7 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($totalExpenses ?? 0, 2) }}
+                            {{ $currencySymbol }}{{ number_format($totalExpenses ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1199,7 +1199,7 @@
                         </span>
 
                         <span class="financial-value positive">
-                            ₱{{ number_format($totalRemittances ?? 0, 2) }}
+                            {{ $currencySymbol }}{{ number_format($totalRemittances ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1217,7 +1217,7 @@
                         <div class="financial-highlight-value
                             {{ ($netPosition ?? 0) >= 0 ? 'positive' : 'negative' }}">
 
-                            ₱{{ number_format($netPosition ?? 0, 2) }}
+                            {{ $currencySymbol }}{{ number_format($netPosition ?? 0, 2) }}
 
                         </div>
 
@@ -1231,7 +1231,7 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($monthlySales ?? 0, 2) }}
+                            {{ $currencySymbol }}{{ number_format($monthlySales ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1244,7 +1244,7 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($monthlyPurchases ?? 0, 2) }}
+                            {{ $currencySymbol }}{{ number_format($monthlyPurchases ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1257,7 +1257,7 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($monthlyExpenses ?? 0, 2) }}
+                            {{ $currencySymbol }}{{ number_format($monthlyExpenses ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1270,7 +1270,7 @@
                         </span>
 
                         <span class="financial-value">
-                            ₱{{ number_format($monthlyRemittances ?? 0, 2) }}
+                            {{ $currencySymbol }}{{ number_format($monthlyRemittances ?? 0, 2) }}
                         </span>
 
                     </div>
@@ -1568,7 +1568,7 @@
                                     <td>
 
                                         <span class="dashboard-amount">
-                                            ₱{{ number_format((float) $sale->total, 2) }}
+                                            {{ $currencySymbol }}{{ number_format((float) $sale->total, 2) }}
                                         </span>
 
                                     </td>
@@ -1588,7 +1588,7 @@
                 <div class="dashboard-empty">
 
                     <div class="dashboard-empty-icon">
-                        ₱
+                        {{ $currencySymbol }}
                     </div>
 
                     <div class="dashboard-empty-title">
@@ -1681,7 +1681,7 @@
                                     <td>
 
                                         <span class="dashboard-amount">
-                                            ₱{{ number_format((float) $expense->amount, 2) }}
+                                            {{ $currencySymbol }}{{ number_format((float) $expense->amount, 2) }}
                                         </span>
 
                                     </td>
@@ -1898,7 +1898,7 @@ document.addEventListener(
                                             return (
                                                 ' ' +
                                                 context.dataset.label +
-                                                ': ₱' +
+                                                ': {{ $currencySymbol }}' +
                                                 Number(
                                                     context.parsed.y
                                                 ).toLocaleString(
@@ -1958,7 +1958,7 @@ document.addEventListener(
                                     callback:
                                         function(value) {
 
-                                            return '₱' +
+                                            return '{{ $currencySymbol }}' +
                                                 Number(value)
                                                     .toLocaleString(
                                                         'en-PH',
@@ -2085,7 +2085,7 @@ document.addEventListener(
                                         function(context) {
 
                                             return (
-                                                ' ₱' +
+                                                ' {{ $currencySymbol }}' +
                                                 Number(
                                                     context.parsed
                                                 ).toLocaleString(

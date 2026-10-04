@@ -163,11 +163,11 @@
         <div class="products-stat-right">
 
             <div class="products-stat-icon">
-                ₱
+                {{ $currencySymbol }}
             </div>
 
             <div class="products-stat-value products-money">
-                ₱{{ number_format((float) $totalProductValue, 2) }}
+                {{ $currencySymbol }}{{ number_format((float) $totalProductValue, 2) }}
             </div>
 
         </div>
@@ -427,7 +427,7 @@
                         <td>
 
                             <span class="products-price">
-                                ₱{{ number_format((float) $product->selling_price, 2) }}
+                                {{ $currencySymbol }}{{ number_format((float) $product->selling_price, 2) }}
                             </span>
 
                         </td>

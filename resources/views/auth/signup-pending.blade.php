@@ -96,7 +96,7 @@
             it. You’ll be able to sign in once your account has been approved.
         </p>
         <a class="login-button" href="{{ route('login') }}">Back to Sign In</a>
-        <div class="footer">BiteSync &nbsp;•&nbsp; The Crazy Bite Co.</div>
+        <div class="footer">BiteSync &nbsp;•&nbsp; {{ $businessName ?? 'The Crazy Bite Co.' }}</div>
     </main>
 </body>
 </html>

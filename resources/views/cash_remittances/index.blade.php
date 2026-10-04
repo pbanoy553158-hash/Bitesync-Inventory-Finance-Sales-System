@@ -70,7 +70,7 @@
         <div class="inventory-stat-right">
 
             <div class="inventory-stat-icon">
-                ₱
+                {{ $currencySymbol }}
             </div>
 
             <div class="inventory-stat-value">
@@ -104,12 +104,12 @@
         <div class="inventory-stat-right">
 
             <div class="inventory-stat-icon">
-                ₱
+                {{ $currencySymbol }}
             </div>
 
             <div class="inventory-stat-value inventory-money">
 
-                ₱{{ number_format(
+                {{ $currencySymbol }}{{ number_format(
                     (float) ($totalExpected ?? 0),
                     2
                 ) }}
@@ -141,12 +141,12 @@
         <div class="inventory-stat-right">
 
             <div class="inventory-stat-icon">
-                ₱
+                {{ $currencySymbol }}
             </div>
 
             <div class="inventory-stat-value inventory-money">
 
-                ₱{{ number_format(
+                {{ $currencySymbol }}{{ number_format(
                     (float) ($totalActual ?? 0),
                     2
                 ) }}
@@ -215,7 +215,7 @@
                     +
                 @endif
 
-                ₱{{ number_format(
+                {{ $currencySymbol }}{{ number_format(
                     abs($summaryVariance),
                     2
                 ) }}
@@ -511,7 +511,7 @@
 
                             <span class="inventory-price">
 
-                                ₱{{ number_format(
+                                {{ $currencySymbol }}{{ number_format(
                                     (float) (
                                         $remittance->expected_amount
                                         ?? 0
@@ -532,7 +532,7 @@
 
                             <span class="inventory-price actual-amount">
 
-                                ₱{{ number_format(
+                                {{ $currencySymbol }}{{ number_format(
                                     (float) (
                                         $remittance->actual_amount
                                         ?? 0
@@ -562,7 +562,7 @@
                                     +
                                 @endif
 
-                                ₱{{ number_format(
+                                {{ $currencySymbol }}{{ number_format(
                                     abs($variance),
                                     2
                                 ) }}
@@ -717,7 +717,7 @@
                         >
 
                             <div class="inventory-empty-icon">
-                                ₱
+                                {{ $currencySymbol }}
                             </div>
 
 
