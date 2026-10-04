@@ -315,6 +315,60 @@ body {
 
 
 /* =========================================================
+   INVENTORY SUBMENU
+========================================================= */
+
+.nav-group {
+    width: 100%;
+}
+
+.nav-group > summary {
+    list-style: none;
+}
+
+.nav-group > summary::-webkit-details-marker {
+    display: none;
+}
+
+.nav-chevron {
+    margin-left: auto;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+}
+
+.nav-group[open] .nav-chevron {
+    transform: rotate(90deg);
+}
+
+.nav-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 4px 0 4px 38px;
+    padding-left: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.nav-subitem {
+    display: block;
+    padding: 7px 9px;
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.75rem;
+    line-height: 1.3;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-subitem:hover,
+.nav-subitem.active {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+
+/* =========================================================
    NAV HOVER
 ========================================================= */
 
@@ -798,6 +852,20 @@ label {
     }
 
 
+    .nav-group[open] .nav-submenu {
+        position: absolute;
+        z-index: 20;
+        left: 72px;
+        width: 150px;
+        margin: -42px 0 0;
+        padding: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 7px;
+        background: var(--dark-soft);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
+    }
+
+
     .nav-icon {
 
         width: 36px;
@@ -1049,20 +1117,46 @@ label {
 
     @if ($isAdmin || $isProcurement)
 
-        <a
-            href="{{ route('inventory.index') }}"
-            class="nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}"
+        <details
+            class="nav-group"
+            {{ request()->routeIs('inventory.*') ? 'open' : '' }}
         >
 
-            <span class="nav-icon">
-                ▦
-            </span>
+            <summary
+                class="nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}"
+            >
 
-            <span>
-                Inventory
-            </span>
+                <span class="nav-icon">
+                    ▦
+                </span>
 
-        </a>
+                <span>
+                    Inventory
+                </span>
+
+                <span class="nav-chevron" aria-hidden="true">›</span>
+
+            </summary>
+
+            <div class="nav-submenu">
+
+                <a
+                    href="{{ route('inventory.index', ['operation' => 'stock-in']) }}"
+                    class="nav-subitem {{ request()->query('operation') === 'stock-in' ? 'active' : '' }}"
+                >
+                    Stock In
+                </a>
+
+                <a
+                    href="{{ route('inventory.index', ['operation' => 'stock-out']) }}"
+                    class="nav-subitem {{ request()->query('operation') === 'stock-out' ? 'active' : '' }}"
+                >
+                    Stock Out
+                </a>
+
+            </div>
+
+        </details>
 
     @endif
 

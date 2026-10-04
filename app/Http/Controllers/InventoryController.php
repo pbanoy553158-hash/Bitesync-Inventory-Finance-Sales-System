@@ -8,6 +8,8 @@ use App\Models\Purchase;
 use App\Models\PurchaseItem;
 use App\Models\Sale;
 use App\Models\StockMovement;
+use App\Models\StockOut;
+use App\Models\StockOutItem;
 use App\Models\StockReceipt;
 use App\Models\StockReceiptItem;
 use App\Models\Supplier;
@@ -887,6 +889,17 @@ class InventoryController extends Controller
                         return $movement;
                     }
 
+                    if (
+                        $movement->reference_type
+                        === StockOut::class
+                    ) {
+                        $movement->reference_label =
+                            'Manual Stock Out #'
+                            . $movement->reference_id;
+
+                        return $movement;
+                    }
+
                     /*
                      * -------------------------------------------------
                      * MANUAL STOCK OUT
@@ -1699,9 +1712,12 @@ class InventoryController extends Controller
         return redirect()
             ->route(
                 'inventory.stock',
-                $request->input(
-                    'items.0.inventory_item_id'
-                )
+                [
+                    'inventoryItem' => $request->input(
+                        'items.0.inventory_item_id'
+                    ),
+                    'operation' => 'stock-in',
+                ]
             )
             ->with(
                 'success',
@@ -1853,7 +1869,10 @@ class InventoryController extends Controller
         return redirect()
             ->route(
                 'inventory.stock',
-                $inventoryItem
+                [
+                    'inventoryItem' => $inventoryItem,
+                    'operation' => 'physical-count',
+                ]
             )
             ->with(
                 'success',
@@ -1867,6 +1886,126 @@ class InventoryController extends Controller
      * MANUAL STOCK OUT
      * =============================================================
      */
+    public function stockOutStore(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        if (!in_array($user->role, ['CEO/Admin', 'Procurement'], true)) {
+            abort(403, 'You are not authorized to perform Manual Stock Out.');
+        }
+
+        $validated = $request->validate([
+            'items' => ['required', 'array', 'min:1'],
+            'items.*.inventory_item_id' => [
+                'required',
+                'distinct',
+                'exists:inventory_items,id',
+            ],
+            'items.*.quantity' => ['required', 'numeric', 'gt:0'],
+            'reason_category' => [
+                'required',
+                Rule::in([
+                    'damaged',
+                    'expired',
+                    'spoiled',
+                    'lost',
+                    'contaminated',
+                    'used',
+                    'other',
+                ]),
+            ],
+            'reason' => ['required', 'string', 'max:1000'],
+        ]);
+
+        if (
+            $validated['reason_category'] === 'other'
+            && mb_strlen(trim($validated['reason'])) < 5
+        ) {
+            throw ValidationException::withMessages([
+                'reason' => 'Please provide a clear explanation when using Other.',
+            ]);
+        }
+
+        DB::transaction(function () use ($validated, $user) {
+            $categoryLabels = [
+                'damaged' => 'Damaged',
+                'expired' => 'Expired',
+                'spoiled' => 'Spoiled',
+                'lost' => 'Lost',
+                'contaminated' => 'Contaminated',
+                'used' => 'Used / Consumed',
+                'other' => 'Other',
+            ];
+
+            $stockOut = StockOut::create([
+                'reason_category' => $validated['reason_category'],
+                'reason' => $validated['reason'],
+                'created_by' => $user->id,
+            ]);
+
+            $itemLines = collect($validated['items'])
+                ->sortBy('inventory_item_id');
+
+            foreach ($itemLines as $index => $line) {
+                $inventoryItem = InventoryItem::where(
+                    'id',
+                    $line['inventory_item_id']
+                )->lockForUpdate()->first();
+
+                if (!$inventoryItem || !$inventoryItem->is_active) {
+                    throw ValidationException::withMessages([
+                        "items.{$index}.inventory_item_id" =>
+                            'Select an active inventory item.',
+                    ]);
+                }
+
+                $quantityBefore = (float) $inventoryItem->quantity;
+                $quantityRemoved = (float) $line['quantity'];
+
+                if ($quantityRemoved > $quantityBefore) {
+                    throw ValidationException::withMessages([
+                        "items.{$index}.quantity" =>
+                            "The quantity removed cannot be greater than the current stock for {$inventoryItem->name}.",
+                    ]);
+                }
+
+                $quantityAfter = $quantityBefore - $quantityRemoved;
+
+                $inventoryItem->update(['quantity' => $quantityAfter]);
+
+                StockOutItem::create([
+                    'stock_out_id' => $stockOut->id,
+                    'inventory_item_id' => $inventoryItem->id,
+                    'quantity' => $quantityRemoved,
+                ]);
+
+                StockMovement::create([
+                    'inventory_item_id' => $inventoryItem->id,
+                    'user_id' => $user->id,
+                    'type' => 'stock_out',
+                    'quantity' => $quantityRemoved,
+                    'quantity_before' => $quantityBefore,
+                    'quantity_after' => $quantityAfter,
+                    'reference_type' => StockOut::class,
+                    'reference_id' => $stockOut->id,
+                    'reason' => 'Manual Stock Out'
+                        . ' | Reason: '
+                        . $categoryLabels[$validated['reason_category']]
+                        . ' | Details: '
+                        . $validated['reason'],
+                ]);
+            }
+
+        });
+
+        return redirect()
+            ->route('inventory.stock', [
+                'inventoryItem' => $validated['items'][0]['inventory_item_id'],
+                'operation' => 'stock-out',
+            ])
+            ->with('success', 'Manual stock loss recorded successfully for all selected items.');
+    }
+
     public function stockOut(
         Request $request,
         InventoryItem $inventoryItem
@@ -1899,6 +2038,7 @@ class InventoryController extends Controller
                     'spoiled',
                     'lost',
                     'contaminated',
+                    'used',
                     'other',
                 ]),
             ],
@@ -1986,6 +2126,9 @@ class InventoryController extends Controller
 
                 'contaminated' =>
                     'Contaminated',
+
+                'used' =>
+                    'Used / Consumed',
 
                 'other' =>
                     'Other',

@@ -289,6 +289,12 @@ Route::middleware('auth')->group(function () {
         ])->name('inventory.stock-receipt.store');
 
 
+        Route::post('/inventory/stock-out', [
+            InventoryController::class,
+            'stockOutStore'
+        ])->name('inventory.stock-out.store');
+
+
         /*
         |--------------------------------------------------------------------------
         | Legacy / Single-Item Stock In

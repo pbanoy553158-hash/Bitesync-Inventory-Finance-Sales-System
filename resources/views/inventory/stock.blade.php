@@ -44,6 +44,7 @@
     text-transform: uppercase;
 }
 
+
 .stock-page .page-title h1 {
     margin: 0;
     color: var(--dark);
@@ -1511,6 +1512,19 @@ CONTROLLED STOCK OPERATIONS
 
 @if(in_array($user->role, ['CEO/Admin', 'Procurement'], true))
 
+@php
+    $selectedStockOperation = request()->query('operation');
+    $availableStockOperations = ['stock-in', 'stock-out'];
+
+    if ($user->role === 'CEO/Admin') {
+        $availableStockOperations[] = 'physical-count';
+    }
+
+    if (!in_array($selectedStockOperation, $availableStockOperations, true)) {
+        $selectedStockOperation = null;
+    }
+@endphp
+
 <section class="section">
 
 <div class="section-header">
@@ -1518,7 +1532,7 @@ CONTROLLED STOCK OPERATIONS
     <div>
 
         <h2 class="section-title">
-            Controlled Stock Operations
+            {{ $selectedStockOperation === 'stock-in' ? 'Stock In' : ($selectedStockOperation === 'stock-out' ? 'Stock Out' : ($selectedStockOperation === 'physical-count' ? 'Physical Count' : 'Controlled Stock Operations')) }}
         </h2>
 
         <p class="section-subtitle">
@@ -1539,6 +1553,8 @@ CONTROLLED STOCK OPERATIONS
          OPERATION NOTICE
     ====================================================== --}}
 
+    @if(!$selectedStockOperation)
+
     <div class="operation-notice">
 
         <div class="operation-notice-icon">
@@ -1555,6 +1571,8 @@ CONTROLLED STOCK OPERATIONS
 
     </div>
 
+    @endif
+
 
     <div class="operations-grid">
 
@@ -1563,7 +1581,9 @@ CONTROLLED STOCK OPERATIONS
              MANUAL STOCK IN
         ================================================== --}}
 
-        <div class="operation-card stock-receipt-card stock-in-card">
+        @if(in_array($selectedStockOperation, [null, 'stock-in'], true))
+
+        <div id="stock-in" class="operation-card stock-receipt-card stock-in-card">
 
             <div class="operation-card-header">
 
@@ -1592,7 +1612,7 @@ CONTROLLED STOCK OPERATIONS
 
             <form
                 method="POST"
-                action="{{ route('inventory.stock-receipt.store') }}"
+                action="{{ route('inventory.stock-receipt.store', ['operation' => 'stock-in']) }}"
                 id="stockReceiptForm"
             >
 
@@ -2015,12 +2035,16 @@ CONTROLLED STOCK OPERATIONS
 
         </div>
 
+        @endif
+
 
         {{-- =================================================
              MANUAL STOCK OUT
         ================================================== --}}
 
-        <div class="operation-card stock-out-card">
+        @if(in_array($selectedStockOperation, [null, 'stock-out'], true))
+
+        <div id="stock-out" class="operation-card stock-out-card">
 
             <div class="operation-card-header">
 
@@ -2049,7 +2073,8 @@ CONTROLLED STOCK OPERATIONS
 
             <form
                 method="POST"
-                action="{{ route('inventory.stock-out', $inventoryItem) }}"
+                action="{{ route('inventory.stock-out.store', ['operation' => 'stock-out']) }}"
+                id="stockOutForm"
             >
 
                 @csrf
@@ -2057,28 +2082,80 @@ CONTROLLED STOCK OPERATIONS
 
                 <div class="form-grid">
 
-                    <div class="form-group">
+                    <div class="form-group full">
 
                         <label class="form-label">
-
-                            Quantity
-
-                            <span class="required">
-                                *
-                            </span>
-
+                            Inventory Items <span class="required">*</span>
                         </label>
 
-                        <input
-                            type="number"
-                            name="quantity"
-                            class="form-control"
-                            min="0.01"
-                            step="0.01"
-                            value="{{ old('quantity') }}"
-                            placeholder="0.00"
-                            required
-                        >
+                        <div class="receipt-items">
+                            <table class="receipt-items-table">
+                                <thead>
+                                    <tr>
+                                        <th>Inventory Item</th>
+                                        <th>Quantity</th>
+                                        <th>Unit</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="stockOutItemsBody">
+                                    @php
+                                        $oldStockOutItems = old('items', [[
+                                            'inventory_item_id' => $inventoryItem->id,
+                                            'quantity' => '',
+                                        ]]);
+                                    @endphp
+
+                                    @foreach($oldStockOutItems as $index => $oldItem)
+                                        <tr class="stock-out-item">
+                                            <td>
+                                                <select
+                                                    name="items[{{ $index }}][inventory_item_id]"
+                                                    class="form-control stock-out-item-select"
+                                                    required
+                                                >
+                                                    <option value="">Select inventory item</option>
+                                                    @foreach($inventoryItems as $item)
+                                                        <option
+                                                            value="{{ $item->id }}"
+                                                            data-unit="{{ $item->unit->name ?? '—' }}"
+                                                            @selected(($oldItem['inventory_item_id'] ?? '') == $item->id)
+                                                        >
+                                                            {{ $item->name }}{{ $item->sku ? ' — ' . $item->sku : '' }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    name="items[{{ $index }}][quantity]"
+                                                    class="form-control"
+                                                    min="0.01"
+                                                    step="0.01"
+                                                    value="{{ $oldItem['quantity'] ?? '' }}"
+                                                    placeholder="0.00"
+                                                    required
+                                                >
+                                            </td>
+                                            <td><div class="receipt-unit stock-out-unit">—</div></td>
+                                            <td style="text-align:center;">
+                                                <button
+                                                    type="button"
+                                                    class="remove-item-btn remove-stock-out-item"
+                                                    title="Remove item"
+                                                    aria-label="Remove item"
+                                                >×</button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button type="button" class="add-item-btn" id="addStockOutItem">
+                            + Add Item
+                        </button>
 
                     </div>
 
@@ -2141,6 +2218,13 @@ CONTROLLED STOCK OPERATIONS
                             </option>
 
                             <option
+                                value="used"
+                                @selected(old('reason_category') === 'used')
+                            >
+                                Used / Consumed
+                            </option>
+
+                            <option
                                 value="other"
                                 @selected(old('reason_category') === 'other')
                             >
@@ -2190,7 +2274,83 @@ CONTROLLED STOCK OPERATIONS
 
             </form>
 
+            <template id="stockOutItemTemplate">
+                <tr class="stock-out-item">
+                    <td>
+                        <select name="items[__INDEX__][inventory_item_id]" class="form-control stock-out-item-select" required>
+                            <option value="">Select inventory item</option>
+                            @foreach($inventoryItems as $item)
+                                <option value="{{ $item->id }}" data-unit="{{ $item->unit->name ?? '—' }}">
+                                    {{ $item->name }}{{ $item->sku ? ' — ' . $item->sku : '' }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" name="items[__INDEX__][quantity]" class="form-control" min="0.01" step="0.01" placeholder="0.00" required>
+                    </td>
+                    <td><div class="receipt-unit stock-out-unit">—</div></td>
+                    <td style="text-align:center;">
+                        <button type="button" class="remove-item-btn remove-stock-out-item" title="Remove item" aria-label="Remove item">×</button>
+                    </td>
+                </tr>
+            </template>
+
+            <script>
+                (() => {
+                    const itemsBody = document.getElementById('stockOutItemsBody');
+                    const itemTemplate = document.getElementById('stockOutItemTemplate');
+                    const addItemButton = document.getElementById('addStockOutItem');
+                    const form = document.getElementById('stockOutForm');
+
+                    if (!itemsBody || !itemTemplate || !addItemButton || !form) return;
+
+                    let nextIndex = itemsBody.querySelectorAll('.stock-out-item').length;
+
+                    const updateItemUnit = (select) => {
+                        const unit = select.selectedOptions[0]?.dataset.unit || '—';
+                        select.closest('tr')?.querySelector('.stock-out-unit')?.replaceChildren(unit);
+                    };
+
+                    itemsBody.addEventListener('change', (event) => {
+                        if (event.target.matches('.stock-out-item-select')) {
+                            updateItemUnit(event.target);
+                        }
+                    });
+
+                    itemsBody.addEventListener('click', (event) => {
+                        if (!event.target.matches('.remove-stock-out-item')) return;
+                        if (itemsBody.querySelectorAll('.stock-out-item').length > 1) {
+                            event.target.closest('tr').remove();
+                        }
+                    });
+
+                    itemsBody.querySelectorAll('.stock-out-item-select').forEach(updateItemUnit);
+
+                    addItemButton.addEventListener('click', () => {
+                        const row = itemTemplate.content.cloneNode(true);
+                        row.querySelectorAll('[name]').forEach((field) => {
+                            field.name = field.name.replaceAll('__INDEX__', nextIndex);
+                        });
+                        itemsBody.appendChild(row);
+                        nextIndex += 1;
+                    });
+
+                    form.addEventListener('submit', (event) => {
+                        const selectedItems = [...itemsBody.querySelectorAll('.stock-out-item-select')]
+                            .map((select) => select.value)
+                            .filter(Boolean);
+                        if (new Set(selectedItems).size !== selectedItems.length) {
+                            event.preventDefault();
+                            window.alert('Each inventory item can only be added once.');
+                        }
+                    });
+                })();
+            </script>
+
         </div>
+
+        @endif
 
 
         {{-- =================================================
@@ -2198,9 +2358,9 @@ CONTROLLED STOCK OPERATIONS
              CEO/ADMIN ONLY
         ================================================== --}}
 
-        @if($user->role === 'CEO/Admin')
+        @if($user->role === 'CEO/Admin' && in_array($selectedStockOperation, [null, 'physical-count'], true))
 
-            <div class="operation-card adjustment-card">
+            <div id="physical-count" class="operation-card adjustment-card">
 
                 <div class="operation-card-header">
 
@@ -2225,7 +2385,7 @@ CONTROLLED STOCK OPERATIONS
 
                 <form
                     method="POST"
-                    action="{{ route('inventory.adjust', $inventoryItem) }}"
+                    action="{{ route('inventory.adjust', ['inventoryItem' => $inventoryItem, 'operation' => 'physical-count']) }}"
                 >
 
                     @csrf

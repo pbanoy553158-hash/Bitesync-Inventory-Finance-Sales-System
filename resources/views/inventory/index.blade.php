@@ -200,23 +200,33 @@
     </div>
 
 
-    @if (
-        $user->role === 'CEO/Admin' ||
-        $user->role === 'Procurement'
-    )
+    <div class="inventory-panel-actions">
 
-        <a
-            href="{{ route('inventory.create') }}"
-            class="inventory-add-button"
-        >
+        @if($user->role === 'CEO/Admin')
+            <a
+                href="{{ route('inventory.index', ['operation' => 'physical-count']) }}"
+                class="inventory-count-button {{ request()->query('operation') === 'physical-count' ? 'active' : '' }}"
+                @if(request()->query('operation') === 'physical-count') aria-current="page" @endif
+            >
+                <span>±</span>
+                Physical Count
+            </a>
+        @endif
 
-            <span>+</span>
+        @if (
+            $user->role === 'CEO/Admin' ||
+            $user->role === 'Procurement'
+        )
+            <a
+                href="{{ route('inventory.create') }}"
+                class="inventory-add-button"
+            >
+                <span>+</span>
+                Add Inventory
+            </a>
+        @endif
 
-            Add Inventory
-
-        </a>
-
-    @endif
+    </div>
 
 </div>
 
@@ -230,6 +240,10 @@
     action="{{ route('inventory.index') }}"
     class="inventory-filters"
 >
+
+    @if($user->role === 'CEO/Admin' && request()->query('operation') === 'physical-count')
+        <input type="hidden" name="operation" value="physical-count">
+    @endif
 
     <div class="inventory-search-wrapper">
 
@@ -710,14 +724,20 @@
 
                             <div class="inventory-table-actions">
 
+                                @php
+                                    $inventoryOperation = $user->role === 'CEO/Admin'
+                                        ? request()->query('operation')
+                                        : null;
+                                @endphp
+
                                 <a
-                                    href="{{ route('inventory.stock', $item) }}"
+                                    href="{{ route('inventory.stock', ['inventoryItem' => $item, 'operation' => $inventoryOperation]) }}{{ $inventoryOperation === 'stock-in' ? '#stock-in' : ($inventoryOperation === 'stock-out' ? '#stock-out' : ($inventoryOperation === 'physical-count' ? '#physical-count' : '')) }}"
                                     class="inventory-stock-button"
                                 >
 
                                     <span>↕</span>
 
-                                    Stock
+                                    {{ $inventoryOperation === 'physical-count' ? 'Physical Count' : ($inventoryOperation === 'stock-in' ? 'Stock In' : ($inventoryOperation === 'stock-out' ? 'Stock Out' : 'Stock')) }}
 
                                 </a>
 
@@ -1159,6 +1179,15 @@
 
     margin-top: 3px;
 
+.inventory-panel-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+
+
     color: var(--muted);
 
     font-size: 0.6875rem;
@@ -1237,6 +1266,43 @@
 
     font-size: 0.8125rem;
 
+    line-height: 1;
+}
+
+
+.inventory-count-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--brown);
+    text-decoration: none;
+    font-size: 0.6875rem;
+    line-height: 1.2;
+    font-weight: 700;
+    transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.inventory-count-button:hover {
+    border-color: var(--orange);
+    background: var(--orange-light);
+    color: var(--orange-dark);
+}
+
+.inventory-count-button.active {
+    border-color: var(--orange);
+    background: var(--orange-light);
+    color: var(--orange-dark);
+    box-shadow: inset 0 0 0 1px rgba(196, 122, 58, 0.16);
+}
+
+.inventory-count-button span {
+    font-size: 0.8125rem;
     line-height: 1;
 }
 
@@ -2378,6 +2444,17 @@
 
     .inventory-add-button {
 
+        width: 100%;
+    }
+
+
+    .inventory-panel-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+
+    .inventory-count-button {
         width: 100%;
     }
 
