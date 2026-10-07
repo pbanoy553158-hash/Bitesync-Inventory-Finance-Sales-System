@@ -55,4 +55,26 @@ class UserController extends Controller
             ->route('admin.users.index')
             ->with('status', "{$user->name}'s account has been approved.");
     }
+
+    /**
+     * Decline a pending account without deleting its record.
+     */
+    public function decline(User $user): RedirectResponse
+    {
+        if ($user->approval_status !== User::APPROVAL_PENDING) {
+            return redirect()
+                ->route('admin.users.index')
+                ->withErrors([
+                    'approval' => 'This account is no longer waiting for approval.',
+                ]);
+        }
+
+        $user->forceFill([
+            'approval_status' => User::APPROVAL_DECLINED,
+        ])->save();
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('status', "{$user->name}'s account has been declined.");
+    }
 }

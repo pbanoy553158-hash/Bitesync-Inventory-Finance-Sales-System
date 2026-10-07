@@ -103,6 +103,10 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if (!$user->isApproved()) {
+            $approvalMessage = $user->approval_status === User::APPROVAL_PENDING
+                ? 'Your account is waiting for admin approval.'
+                : 'Your account has not been approved.';
+
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -110,7 +114,7 @@ class AuthController extends Controller
             return redirect()
                 ->route('login')
                 ->withErrors([
-                    'email' => 'Your account is waiting for admin approval.',
+                    'email' => $approvalMessage,
                 ])
                 ->onlyInput('email');
         }

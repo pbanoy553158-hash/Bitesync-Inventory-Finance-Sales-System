@@ -63,6 +63,28 @@ class SignupPageTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_declined_user_cannot_sign_in(): void
+    {
+        User::factory()->create([
+            'email' => 'declined@example.com',
+            'password' => 'secure-password',
+            'role' => 'Pending',
+            'approval_status' => User::APPROVAL_DECLINED,
+        ]);
+
+        $this->from('/login')
+            ->post('/login', [
+                'email' => 'declined@example.com',
+                'password' => 'secure-password',
+            ])
+            ->assertRedirect('/login')
+            ->assertSessionHasErrors([
+                'email' => 'Your account has not been approved.',
+            ]);
+
+        $this->assertGuest();
+    }
+
     public function test_admin_can_approve_a_pending_user_and_assign_a_role(): void
     {
         $admin = User::factory()->create([
@@ -85,6 +107,46 @@ class SignupPageTest extends TestCase
             'role' => 'Finance',
             'approval_status' => User::APPROVAL_APPROVED,
         ]);
+    }
+
+    public function test_admin_can_decline_a_pending_user_without_deleting_the_account(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'CEO/Admin',
+            'approval_status' => User::APPROVAL_APPROVED,
+        ]);
+        $pendingUser = User::factory()->create([
+            'role' => 'Pending',
+            'approval_status' => User::APPROVAL_PENDING,
+        ]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.users.decline', $pendingUser))
+            ->assertRedirect(route('admin.users.index'))
+            ->assertSessionHas('status', "{$pendingUser->name}'s account has been declined.");
+
+        $this->assertDatabaseHas('users', [
+            'id' => $pendingUser->id,
+            'approval_status' => User::APPROVAL_DECLINED,
+        ]);
+    }
+
+    public function test_admin_user_list_shows_a_decline_button_for_pending_accounts(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'CEO/Admin',
+            'approval_status' => User::APPROVAL_APPROVED,
+        ]);
+        $pendingUser = User::factory()->create([
+            'role' => 'Pending',
+            'approval_status' => User::APPROVAL_PENDING,
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.users.index'))
+            ->assertOk()
+            ->assertSee('Decline')
+            ->assertSee(route('admin.users.decline', $pendingUser));
     }
 
     public function test_signup_rejects_invalid_or_duplicate_accounts(): void

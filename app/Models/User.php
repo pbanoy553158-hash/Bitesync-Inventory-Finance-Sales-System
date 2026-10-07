@@ -14,6 +14,8 @@ class User extends Authenticatable
 
     public const APPROVAL_APPROVED = 'approved';
 
+    public const APPROVAL_DECLINED = 'declined';
+
     protected $fillable = [
         'name',
         'email',

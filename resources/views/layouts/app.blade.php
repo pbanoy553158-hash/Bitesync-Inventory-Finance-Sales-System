@@ -320,13 +320,46 @@ body {
 
 .nav-group {
     width: 100%;
+    position: relative;
 }
 
-.nav-group > summary {
+.nav-group-toggle {
+    display: flex;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    width: 38px;
+    min-width: 38px;
+    justify-content: center;
+    align-items: center;
+    padding-left: 8px;
+    padding-right: 10px;
+    border: 0;
+    border-radius: 0 9px 9px 0;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.72);
+    cursor: pointer;
+}
+
+.nav-group-link {
+    width: 100%;
+    min-width: 0;
+    padding-right: 48px;
+    background: transparent;
+    border-radius: 9px;
+}
+
+.nav-group-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-group-toggle,
+.nav-group-toggle::-webkit-details-marker {
     list-style: none;
 }
 
-.nav-group > summary::-webkit-details-marker {
+.nav-group-toggle::-webkit-details-marker {
     display: none;
 }
 
@@ -337,17 +370,21 @@ body {
     transition: transform 0.2s ease;
 }
 
-.nav-group[open] .nav-chevron {
+.nav-group.is-open .nav-chevron {
     transform: rotate(90deg);
 }
 
 .nav-submenu {
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 2px;
     margin: 4px 0 4px 38px;
     padding-left: 10px;
     border-left: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.nav-group.is-open .nav-submenu {
+    display: flex;
 }
 
 .nav-subitem {
@@ -878,8 +915,13 @@ label {
         display: none;
     }
 
+    .nav-item.nav-group-toggle span.nav-chevron {
 
-    .nav-group[open] .nav-submenu {
+        display: inline;
+    }
+
+
+    .nav-group.is-open .nav-submenu {
         position: absolute;
         z-index: 20;
         left: 72px;
@@ -985,7 +1027,7 @@ label {
         height: 28px;
     }
 
-    .nav-group[open] .nav-submenu {
+    .nav-group.is-open .nav-submenu {
         position: static;
         width: auto;
         margin: 4px 0 4px 38px;
@@ -1062,7 +1104,7 @@ label {
         padding: 12px 14px 28px;
     }
 
-    .nav-group[open] .nav-submenu {
+    .nav-group.is-open .nav-submenu {
         position: static;
         width: auto;
         margin: 4px 0 4px 38px;
@@ -1257,15 +1299,25 @@ label {
 
     @if ($isAdmin || $isProcurement)
 
-        <details
-            class="nav-group"
-            {{ request()->routeIs('inventory.*') ? 'open' : '' }}
+        <div
+            class="nav-group {{ request()->routeIs('inventory.*') ? 'is-open' : '' }}"
         >
 
-            <summary
-                class="nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}"
+            <button
+                type="button"
+                class="nav-item nav-group-toggle"
+                aria-label="Toggle inventory menu"
+                aria-controls="inventory-submenu"
+                aria-expanded="{{ request()->routeIs('inventory.*') ? 'true' : 'false' }}"
             >
+                <span class="nav-chevron" aria-hidden="true">›</span>
+            </button>
 
+            <a
+                href="{{ route('inventory.index') }}"
+                class="nav-item nav-group-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}"
+                @if(request()->routeIs('inventory.index')) aria-current="page" @endif
+            >
                 <span class="nav-icon">
                     ▦
                 </span>
@@ -1273,12 +1325,9 @@ label {
                 <span>
                     Inventory
                 </span>
+            </a>
 
-                <span class="nav-chevron" aria-hidden="true">›</span>
-
-            </summary>
-
-            <div class="nav-submenu">
+            <div class="nav-submenu" id="inventory-submenu">
 
                 <a
                     href="{{ route('inventory.index', ['operation' => 'stock-in']) }}"
@@ -1296,7 +1345,23 @@ label {
 
             </div>
 
-        </details>
+        </div>
+
+    @elseif ($isFinance)
+
+        <a
+            href="{{ route('inventory.index') }}"
+            class="nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}"
+            @if(request()->routeIs('inventory.index')) aria-current="page" @endif
+        >
+            <span class="nav-icon">
+                ▦
+            </span>
+
+            <span>
+                Inventory
+            </span>
+        </a>
 
     @endif
 
@@ -1733,6 +1798,16 @@ label {
         const sidebar = document.querySelector('.sidebar');
         const toggle = document.querySelector('[data-sidebar-toggle]');
         const backdrop = document.querySelector('[data-sidebar-backdrop]');
+
+        document.querySelectorAll('.nav-group-toggle').forEach((menuToggle) => {
+            menuToggle.addEventListener('click', () => {
+                const group = menuToggle.closest('.nav-group');
+                if (!group) return;
+
+                const isOpen = group.classList.toggle('is-open');
+                menuToggle.setAttribute('aria-expanded', String(isOpen));
+            });
+        });
 
         if (!sidebar || !toggle || !backdrop) return;
 

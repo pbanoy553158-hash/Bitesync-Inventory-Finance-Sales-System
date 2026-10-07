@@ -135,6 +135,11 @@ Route::middleware('auth')->group(function () {
             'approve'
         ])->name('admin.users.approve');
 
+        Route::post('/admin/users/{user}/decline', [
+            UserController::class,
+            'decline'
+        ])->name('admin.users.decline');
+
     });
 
 
@@ -196,7 +201,7 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::middleware(
-        'role:CEO/Admin,Procurement'
+        'role:CEO/Admin,Finance,Procurement'
     )->group(function () {
 
         Route::get('/inventory', [

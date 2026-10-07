@@ -39,18 +39,27 @@
                         <div style="margin-top: 4px; color: #9b9189; font-size: 12px;">Requested {{ $pendingUser->created_at->format('M d, Y') }}</div>
                     </div>
 
-                    <form method="POST" action="{{ route('admin.users.approve', $pendingUser) }}" style="display: flex; align-items: center; gap: 10px;">
-                        @csrf
-                        <label for="role-{{ $pendingUser->id }}" style="color: #71675f; font-size: 12px;">Assign role</label>
-                        <select id="role-{{ $pendingUser->id }}" name="role" required style="min-height: 40px; padding: 0 10px; border: 1px solid #ddd4ca; border-radius: 8px; background: #fff; color: #34251d;">
-                            <option value="Procurement">Procurement</option>
-                            <option value="Finance">Finance</option>
-                            <option value="CEO/Admin">CEO/Admin</option>
-                        </select>
-                        <button type="submit" style="min-height: 40px; padding: 0 14px; border: 0; border-radius: 8px; background: #a85f28; color: white; cursor: pointer; font-weight: 700;">
-                            Approve
-                        </button>
-                    </form>
+                    <div style="display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px;">
+                        <form method="POST" action="{{ route('admin.users.approve', $pendingUser) }}" style="display: flex; align-items: center; gap: 10px;">
+                            @csrf
+                            <label for="role-{{ $pendingUser->id }}" style="color: #71675f; font-size: 12px;">Assign role</label>
+                            <select id="role-{{ $pendingUser->id }}" name="role" required style="min-height: 40px; padding: 0 10px; border: 1px solid #ddd4ca; border-radius: 8px; background: #fff; color: #34251d;">
+                                <option value="Procurement">Procurement</option>
+                                <option value="Finance">Finance</option>
+                                <option value="CEO/Admin">CEO/Admin</option>
+                            </select>
+                            <button type="submit" style="min-height: 40px; padding: 0 14px; border: 0; border-radius: 8px; background: #a85f28; color: white; cursor: pointer; font-weight: 700;">
+                                Approve
+                            </button>
+                        </form>
+
+                        <form method="POST" action="{{ route('admin.users.decline', $pendingUser) }}" onsubmit="return confirm('Decline this account?');">
+                            @csrf
+                            <button type="submit" style="min-height: 40px; padding: 0 14px; border: 1px solid #d9b9b5; border-radius: 8px; background: #fff; color: #a43f36; cursor: pointer; font-weight: 700;">
+                                Decline
+                            </button>
+                        </form>
+                    </div>
                 </div>
             @empty
                 <div style="padding: 28px 20px; color: #81776f; font-size: 14px;">
