@@ -724,23 +724,23 @@
 
                             <div class="inventory-table-actions">
 
-                                @php
-                                    $inventoryOperation = $user->role === 'CEO/Admin'
-                                        ? request()->query('operation')
-                                        : null;
-                                @endphp
-
-                                <a
-                                    href="{{ route('inventory.stock', ['inventoryItem' => $item, 'operation' => $inventoryOperation]) }}{{ $inventoryOperation === 'stock-in' ? '#stock-in' : ($inventoryOperation === 'stock-out' ? '#stock-out' : ($inventoryOperation === 'physical-count' ? '#physical-count' : '')) }}"
-                                    class="inventory-stock-button"
-                                >
-
-                                    <span>↕</span>
-
-                                    {{ $inventoryOperation === 'physical-count' ? 'Physical Count' : ($inventoryOperation === 'stock-in' ? 'Stock In' : ($inventoryOperation === 'stock-out' ? 'Stock Out' : 'Stock')) }}
-
-                                </a>
-
+                                @if (request()->query('operation') === 'stock-in')
+                                    <a
+                                        href="{{ route('inventory.stock', ['inventoryItem' => $item, 'operation' => 'stock-in']) }}#stock-in"
+                                        class="inventory-stock-button"
+                                    >
+                                        <span>↕</span>
+                                        Stock In
+                                    </a>
+                                @elseif (request()->query('operation') === 'stock-out')
+                                    <a
+                                        href="{{ route('inventory.stock', ['inventoryItem' => $item, 'operation' => 'stock-out']) }}#stock-out"
+                                        class="inventory-stock-button"
+                                    >
+                                        <span>↕</span>
+                                        Stock Out
+                                    </a>
+                                @endif
 
                                 <a
                                     href="{{ route('inventory.edit', $item) }}"

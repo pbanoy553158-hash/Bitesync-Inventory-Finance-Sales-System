@@ -370,7 +370,7 @@ body {
     transition: transform 0.2s ease;
 }
 
-.nav-group.is-open .nav-chevron {
+.nav-group.is-open > .nav-group-toggle .nav-chevron {
     transform: rotate(90deg);
 }
 
@@ -383,7 +383,7 @@ body {
     border-left: 1px solid rgba(255, 255, 255, 0.16);
 }
 
-.nav-group.is-open .nav-submenu {
+.nav-group.is-open > .nav-submenu {
     display: flex;
 }
 
@@ -921,7 +921,7 @@ label {
     }
 
 
-    .nav-group.is-open .nav-submenu {
+    .nav-group.is-open > .nav-submenu {
         position: absolute;
         z-index: 20;
         left: 72px;
@@ -1027,7 +1027,7 @@ label {
         height: 28px;
     }
 
-    .nav-group.is-open .nav-submenu {
+    .nav-group.is-open > .nav-submenu {
         position: static;
         width: auto;
         margin: 4px 0 4px 38px;
@@ -1297,7 +1297,7 @@ label {
          Procurement = manage
     ================================================== -->
 
-    @if ($isAdmin || $isProcurement)
+    @if ($isAdmin || $isFinance || $isProcurement)
 
         <div
             class="nav-group {{ request()->routeIs('inventory.*') ? 'is-open' : '' }}"
@@ -1332,6 +1332,7 @@ label {
                 <a
                     href="{{ route('inventory.index', ['operation' => 'stock-in']) }}"
                     class="nav-subitem {{ request()->query('operation') === 'stock-in' ? 'active' : '' }}"
+                    @if(request()->query('operation') === 'stock-in') aria-current="page" @endif
                 >
                     Stock In
                 </a>
@@ -1339,6 +1340,7 @@ label {
                 <a
                     href="{{ route('inventory.index', ['operation' => 'stock-out']) }}"
                     class="nav-subitem {{ request()->query('operation') === 'stock-out' ? 'active' : '' }}"
+                    @if(request()->query('operation') === 'stock-out') aria-current="page" @endif
                 >
                     Stock Out
                 </a>
@@ -1346,22 +1348,6 @@ label {
             </div>
 
         </div>
-
-    @elseif ($isFinance)
-
-        <a
-            href="{{ route('inventory.index') }}"
-            class="nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}"
-            @if(request()->routeIs('inventory.index')) aria-current="page" @endif
-        >
-            <span class="nav-icon">
-                ▦
-            </span>
-
-            <span>
-                Inventory
-            </span>
-        </a>
 
     @endif
 
