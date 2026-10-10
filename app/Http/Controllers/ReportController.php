@@ -7,6 +7,7 @@ use App\Models\Expense;
 use App\Models\InventoryItem;
 use App\Models\Purchase;
 use App\Models\Sale;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
@@ -40,13 +41,26 @@ class ReportController extends Controller
     |
     */
 
-    public function pdf(Request $request): View
+    public function pdf(Request $request): Response
     {
         $reportData = $this->getReportData($request);
 
-        return view(
+        $startDate = $reportData['startDate'];
+        $endDate = $reportData['endDate'];
+
+        $pdf = Pdf::loadView(
             'reports.pdf',
             $reportData
+        )
+            ->setPaper('a4', 'portrait')
+            ->setOption('isRemoteEnabled', true);
+
+        return $pdf->download(
+            'BiteSync_Report_' .
+            $startDate .
+            '_to_' .
+            $endDate .
+            '.pdf'
         );
     }
 

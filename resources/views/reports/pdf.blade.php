@@ -28,6 +28,7 @@
         background: #f5f1eb;
         color: #2c241f;
         font-family:
+            "DejaVu Sans",
             Arial,
             Helvetica,
             sans-serif;
@@ -39,50 +40,6 @@
         width: 100%;
         max-width: 1100px;
         margin: 0 auto;
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | PRINT ACTIONS
-    |--------------------------------------------------------------------------
-    */
-
-    .print-actions {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 8px;
-        margin-bottom: 15px;
-    }
-
-
-    .print-button {
-        height: 35px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 13px;
-        border: 1px solid #e4dcd4;
-        border-radius: 8px;
-        background: white;
-        color: #625951;
-        font-family: inherit;
-        font-size: 11px;
-        font-weight: 700;
-        cursor: pointer;
-    }
-
-
-    .print-button.primary {
-        border-color: #c47a3a;
-        background:
-            linear-gradient(
-                135deg,
-                #c47a3a,
-                #a85f28
-            );
-        color: white;
     }
 
 
@@ -240,14 +197,16 @@
 
 
     .section-header {
-        min-height: 65px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 15px;
+        display: table;
+        width: 100%;
         padding: 14px 19px;
         border-bottom: 1px solid #e4dcd4;
         background: white;
+    }
+
+    .section-header > div:first-child {
+        display: table-cell;
+        vertical-align: middle;
     }
 
 
@@ -271,10 +230,9 @@
     .section-icon {
         width: 30px;
         height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
         border-radius: 8px;
         background: #f4e4d4;
         color: #c47a3a;
@@ -590,13 +548,6 @@
         .report-page {
             max-width: none;
         }
-
-
-        .print-actions {
-            display: none !important;
-        }
-
-
         .section {
             box-shadow: none;
             break-inside: avoid;
@@ -649,36 +600,6 @@
 
 
 <div class="report-page">
-
-
-{{-- ============================================================
-SCREEN-ONLY ACTIONS
-============================================================ --}}
-
-<div class="print-actions">
-
-    <button
-        type="button"
-        class="print-button"
-        onclick="window.history.back()"
-    >
-
-        ← Back
-
-    </button>
-
-
-    <button
-        type="button"
-        class="print-button primary"
-        onclick="window.print()"
-    >
-
-        Print / Save as PDF
-
-    </button>
-
-</div>
 
 
 {{-- ============================================================
