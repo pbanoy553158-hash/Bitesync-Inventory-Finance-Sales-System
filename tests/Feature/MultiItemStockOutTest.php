@@ -153,6 +153,35 @@ class MultiItemStockOutTest extends TestCase
         ]), false);
     }
 
+    public function test_finance_inventory_navigation_hides_stock_actions_from_view_only_users(): void
+    {
+        $financeUser = User::factory()->create([
+            'role' => 'Finance',
+        ]);
+        $this->createInventoryItems([10]);
+
+        $response = $this->actingAs($financeUser)
+            ->get(route('inventory.index'));
+
+        $response->assertOk();
+        $response->assertSee('Inventory');
+        $response->assertDontSee('Stock In');
+        $response->assertDontSee('Stock Out');
+        $response->assertDontSee('inventory-submenu', false);
+
+        $procurementUser = User::factory()->create([
+            'role' => 'Procurement',
+        ]);
+        $procurementResponse = $this->actingAs($procurementUser)
+            ->get(route('inventory.index'));
+
+        $procurementResponse->assertOk();
+        $procurementResponse->assertSee('Stock In');
+        $procurementResponse->assertSee('Stock Out');
+        $procurementResponse->assertSee('aria-controls="inventory-submenu"', false);
+        $procurementResponse->assertSee('inventory-submenu', false);
+    }
+
     public function test_physical_count_mode_only_renders_the_adjustment_form(): void
     {
         $user = User::factory()->create([

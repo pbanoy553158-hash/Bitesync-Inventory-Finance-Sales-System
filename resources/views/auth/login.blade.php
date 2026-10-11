@@ -8,6 +8,8 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <link rel="icon" type="image/png" href="{{ asset('bitesync-icon.png') }}">
+
     <title>BiteSync | Sign In</title>
 
     <style>
@@ -147,26 +149,12 @@
         .brand-icon {
             width: 58px;
             height: 58px;
+            flex: 0 0 58px;
 
             border-radius: 17px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: linear-gradient(
-                135deg,
-                #d79555,
-                #a85f28
-            );
-
             box-shadow:
                 0 10px 30px rgba(0, 0, 0, 0.25);
-        }
-
-        .brand-icon span {
-            font-size: 26px;
-            font-weight: 800;
         }
 
         .brand-name {
@@ -716,12 +704,9 @@
             .brand-icon {
                 width: 48px;
                 height: 48px;
+                flex-basis: 48px;
 
                 border-radius: 14px;
-            }
-
-            .brand-icon span {
-                font-size: 21px;
             }
 
             .brand-name {
@@ -769,9 +754,7 @@
 
             <div class="brand-header">
 
-                <div class="brand-icon">
-                    <span>B</span>
-                </div>
+                <img class="brand-icon" src="{{ asset('bitesync-icon.png') }}" alt="">
 
                 <div>
                     <div class="brand-name">

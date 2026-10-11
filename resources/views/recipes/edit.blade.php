@@ -601,7 +601,6 @@
                                                     'recipeItem' => $recipeItem
                                                 ]
                                             ) }}"
-                                            onsubmit="return confirm('Remove this ingredient from the recipe?');"
                                         >
 
                                             @csrf

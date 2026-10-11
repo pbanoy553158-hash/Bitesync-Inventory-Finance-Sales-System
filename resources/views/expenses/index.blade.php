@@ -162,7 +162,7 @@
                             <td class="expense-action-cell">
                                 <div class="expense-inline-actions">
                                     <a href="{{ route('expenses.edit', $expense) }}">Edit</a>
-                                    <form action="{{ route('expenses.destroy', $expense) }}" method="POST" onsubmit="return confirm('Delete this expense?');">
+                                    <form action="{{ route('expenses.destroy', $expense) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="expense-delete-button">Delete</button>

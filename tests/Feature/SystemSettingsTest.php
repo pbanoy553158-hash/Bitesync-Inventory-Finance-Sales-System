@@ -28,6 +28,10 @@ class SystemSettingsTest extends TestCase
         $response->assertSee('Personalise how BiteSync looks for your account.');
         $response->assertSee('name="appearance_theme" value="dark"', false);
         $response->assertSee('name="text_size" value="large"', false);
+        $response->assertSee('data-logout-dialog', false);
+        $response->assertSee('Yes, log out');
+        $response->assertSee('data-delete-dialog', false);
+        $response->assertSee('data-delete-confirm', false);
         $response->assertSee('User Access');
     }
 

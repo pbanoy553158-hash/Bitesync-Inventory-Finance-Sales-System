@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ asset('bitesync-icon.png') }}">
     <title>BiteSync | Create Account</title>
     <style>
         * {
@@ -41,13 +42,8 @@
         .brand-icon {
             width: 48px;
             height: 48px;
-            display: grid;
-            place-items: center;
+            flex: 0 0 48px;
             border-radius: 14px;
-            background: linear-gradient(135deg, #d79555, #a85f28);
-            color: white;
-            font-size: 22px;
-            font-weight: 800;
         }
 
         .brand-name {
@@ -224,7 +220,7 @@
 <body>
     <main class="card">
         <div class="brand">
-            <div class="brand-icon" aria-hidden="true">B</div>
+            <img class="brand-icon" src="{{ asset('bitesync-icon.png') }}" alt="">
             <div>
                 <div class="brand-name">BiteSync</div>
                 <div class="brand-tagline">Inventory Management System</div>

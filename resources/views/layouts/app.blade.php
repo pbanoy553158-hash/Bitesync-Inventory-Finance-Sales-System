@@ -11,6 +11,8 @@
     content="width=device-width, initial-scale=1.0"
 >
 
+<link rel="icon" type="image/png" href="{{ asset('bitesync-icon.png') }}">
+
 <title>
     @yield('title', 'BiteSync')
 </title>
@@ -185,6 +187,7 @@ body {
     display: flex;
 
     align-items: center;
+    gap: 10px;
 
     padding:
         3px
@@ -194,6 +197,14 @@ body {
         clamp(14px, 2.5vh, 27px);
 
     flex-shrink: 0;
+}
+
+.logo-mark {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    display: block;
+    border-radius: 12px;
 }
 
 
@@ -685,6 +696,160 @@ body {
         rgba(255, 255, 255, 0.11);
 
     color: white;
+}
+
+.logout-confirmation {
+    width: min(420px, calc(100% - 32px));
+    max-width: none;
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--card);
+    color: var(--text);
+    box-shadow: 0 24px 70px rgba(24, 18, 14, 0.28);
+}
+
+.logout-confirmation::backdrop {
+    background: rgba(24, 18, 14, 0.58);
+    backdrop-filter: blur(2px);
+}
+
+.logout-confirmation-content {
+    padding: 25px;
+}
+
+.logout-confirmation-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    background: var(--orange-light);
+    color: var(--orange-dark);
+    font-size: 19px;
+}
+
+.logout-confirmation h2 {
+    margin: 0;
+    color: var(--dark);
+    font-size: 19px;
+    line-height: 1.3;
+}
+
+.logout-confirmation p {
+    margin: 8px 0 22px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.logout-confirmation-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+}
+
+.logout-confirmation-actions button {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--card);
+    color: var(--dark-soft);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.logout-confirmation-actions button:focus-visible {
+    outline: 3px solid rgba(196, 122, 58, 0.35);
+    outline-offset: 2px;
+}
+
+.logout-confirm-button {
+    border-color: var(--orange-dark) !important;
+    background: var(--orange-dark) !important;
+    color: white !important;
+}
+
+.delete-confirmation {
+    width: min(420px, calc(100% - 32px));
+    max-width: none;
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--card);
+    color: var(--text);
+    box-shadow: 0 24px 70px rgba(24, 18, 14, 0.28);
+}
+
+.delete-confirmation::backdrop {
+    background: rgba(24, 18, 14, 0.58);
+    backdrop-filter: blur(2px);
+}
+
+.delete-confirmation-content {
+    padding: 25px;
+}
+
+.delete-confirmation-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    background: #fce8e6;
+    color: #b42318;
+    font-size: 19px;
+}
+
+.delete-confirmation h2 {
+    margin: 0;
+    color: var(--dark);
+    font-size: 19px;
+    line-height: 1.3;
+}
+
+.delete-confirmation p {
+    margin: 8px 0 22px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.delete-confirmation-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+}
+
+.delete-confirmation-actions button {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--card);
+    color: var(--dark-soft);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.delete-confirmation-actions button:focus-visible {
+    outline: 3px solid rgba(180, 35, 24, 0.3);
+    outline-offset: 2px;
+}
+
+.delete-confirm-button {
+    border-color: #b42318 !important;
+    background: #b42318 !important;
+    color: white !important;
 }
 
 .image-upload-preview {
@@ -1322,6 +1487,8 @@ html[data-theme="dark"] .main textarea::placeholder {
 
 <div class="logo">
 
+    <img class="logo-mark" src="{{ asset('bitesync-icon.png') }}" alt="BiteSync">
+
     <div>
 
         <div class="logo-name">
@@ -1444,23 +1611,10 @@ html[data-theme="dark"] .main textarea::placeholder {
 
     @if ($isAdmin || $isFinance || $isProcurement)
 
-        <div
-            class="nav-group {{ request()->routeIs('inventory.*') ? 'is-open' : '' }}"
-        >
-
-            <button
-                type="button"
-                class="nav-item nav-group-toggle"
-                aria-label="Toggle inventory menu"
-                aria-controls="inventory-submenu"
-                aria-expanded="{{ request()->routeIs('inventory.*') ? 'true' : 'false' }}"
-            >
-                <span class="nav-chevron" aria-hidden="true">›</span>
-            </button>
-
+        @if ($isFinance)
             <a
                 href="{{ route('inventory.index') }}"
-                class="nav-item nav-group-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}"
+                class="nav-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}"
                 @if(request()->routeIs('inventory.index')) aria-current="page" @endif
             >
                 <span class="nav-icon">
@@ -1471,28 +1625,55 @@ html[data-theme="dark"] .main textarea::placeholder {
                     Inventory
                 </span>
             </a>
+        @else
+            <div
+                class="nav-group {{ request()->routeIs('inventory.*') ? 'is-open' : '' }}"
+            >
 
-            <div class="nav-submenu" id="inventory-submenu">
+                <button
+                    type="button"
+                    class="nav-item nav-group-toggle"
+                    aria-label="Toggle inventory menu"
+                    aria-controls="inventory-submenu"
+                    aria-expanded="{{ request()->routeIs('inventory.*') ? 'true' : 'false' }}"
+                >
+                    <span class="nav-chevron" aria-hidden="true">›</span>
+                </button>
 
                 <a
-                    href="{{ route('inventory.index', ['operation' => 'stock-in']) }}"
-                    class="nav-subitem {{ request()->query('operation') === 'stock-in' ? 'active' : '' }}"
-                    @if(request()->query('operation') === 'stock-in') aria-current="page" @endif
+                    href="{{ route('inventory.index') }}"
+                    class="nav-item nav-group-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}"
+                    @if(request()->routeIs('inventory.index')) aria-current="page" @endif
                 >
-                    Stock In
+                    <span class="nav-icon">
+                        ▦
+                    </span>
+
+                    <span>
+                        Inventory
+                    </span>
                 </a>
 
-                <a
-                    href="{{ route('inventory.index', ['operation' => 'stock-out']) }}"
-                    class="nav-subitem {{ request()->query('operation') === 'stock-out' ? 'active' : '' }}"
-                    @if(request()->query('operation') === 'stock-out') aria-current="page" @endif
-                >
-                    Stock Out
-                </a>
+                <div class="nav-submenu" id="inventory-submenu">
+                    <a
+                        href="{{ route('inventory.index', ['operation' => 'stock-in']) }}"
+                        class="nav-subitem {{ request()->query('operation') === 'stock-in' ? 'active' : '' }}"
+                        @if(request()->query('operation') === 'stock-in') aria-current="page" @endif
+                    >
+                        Stock In
+                    </a>
+
+                    <a
+                        href="{{ route('inventory.index', ['operation' => 'stock-out']) }}"
+                        class="nav-subitem {{ request()->query('operation') === 'stock-out' ? 'active' : '' }}"
+                        @if(request()->query('operation') === 'stock-out') aria-current="page" @endif
+                    >
+                        Stock Out
+                    </a>
+                </div>
 
             </div>
-
-        </div>
+        @endif
 
     @endif
 
@@ -1888,6 +2069,40 @@ html[data-theme="dark"] .main textarea::placeholder {
 
 </aside>
 
+<dialog
+    class="logout-confirmation"
+    data-logout-dialog
+    aria-labelledby="logout-confirmation-title"
+    aria-describedby="logout-confirmation-message"
+>
+    <div class="logout-confirmation-content">
+        <div class="logout-confirmation-icon" aria-hidden="true">↪</div>
+        <h2 id="logout-confirmation-title">Log out?</h2>
+        <p id="logout-confirmation-message">Are you sure you want to continue logging out?</p>
+        <div class="logout-confirmation-actions">
+            <button type="button" data-logout-cancel>Cancel</button>
+            <button type="button" class="logout-confirm-button" data-logout-confirm>Yes, log out</button>
+        </div>
+    </div>
+</dialog>
+
+<dialog
+    class="delete-confirmation"
+    data-delete-dialog
+    aria-labelledby="delete-confirmation-title"
+    aria-describedby="delete-confirmation-message"
+>
+    <div class="delete-confirmation-content">
+        <div class="delete-confirmation-icon" aria-hidden="true">!</div>
+        <h2 id="delete-confirmation-title">Delete this item?</h2>
+        <p id="delete-confirmation-message">This action cannot be undone. Are you sure you want to continue?</p>
+        <div class="delete-confirmation-actions">
+            <button type="button" data-delete-cancel>Cancel</button>
+            <button type="button" class="delete-confirm-button" data-delete-confirm>Yes, delete</button>
+        </div>
+    </div>
+</dialog>
+
 <div class="sidebar-backdrop" data-sidebar-backdrop></div>
 
 
@@ -1926,6 +2141,71 @@ html[data-theme="dark"] .main textarea::placeholder {
 
 <script>
     (() => {
+        const logoutForm = document.querySelector('.logout-form');
+        const logoutDialog = document.querySelector('[data-logout-dialog]');
+        const logoutCancel = document.querySelector('[data-logout-cancel]');
+        const logoutConfirm = document.querySelector('[data-logout-confirm]');
+
+        if (logoutForm && logoutDialog && logoutCancel && logoutConfirm) {
+            logoutForm.addEventListener('submit', (event) => {
+                if (!logoutDialog.open) {
+                    event.preventDefault();
+                    logoutDialog.showModal();
+                    logoutCancel.focus();
+                }
+            });
+
+            logoutCancel.addEventListener('click', () => logoutDialog.close());
+            logoutConfirm.addEventListener('click', () => logoutForm.submit());
+        }
+
+        const deleteDialog = document.querySelector('[data-delete-dialog]');
+        const deleteCancel = document.querySelector('[data-delete-cancel]');
+        const deleteConfirm = document.querySelector('[data-delete-confirm]');
+        let pendingDeleteForm = null;
+        let confirmedDeleteForm = null;
+
+        if (deleteDialog && deleteCancel && deleteConfirm) {
+            document.addEventListener('submit', (event) => {
+                const form = event.target;
+                if (!(form instanceof HTMLFormElement)) return;
+                if (!form.querySelector('input[name="_method"][value="DELETE"]')) return;
+                if (confirmedDeleteForm === form) {
+                    confirmedDeleteForm = null;
+                    return;
+                }
+
+                event.preventDefault();
+                pendingDeleteForm = form;
+                deleteDialog.showModal();
+                deleteCancel.focus();
+            });
+
+            deleteCancel.addEventListener('click', () => {
+                pendingDeleteForm = null;
+                deleteDialog.close();
+            });
+
+            deleteConfirm.addEventListener('click', () => {
+                const form = pendingDeleteForm;
+                pendingDeleteForm = null;
+                deleteDialog.close();
+
+                if (form) {
+                    confirmedDeleteForm = form;
+                    try {
+                        form.requestSubmit();
+                    } finally {
+                        confirmedDeleteForm = null;
+                    }
+                }
+            });
+
+            deleteDialog.addEventListener('close', () => {
+                pendingDeleteForm = null;
+            });
+        }
+
         document.querySelectorAll('.image-upload-input').forEach((input) => {
             input.addEventListener('change', () => {
                 const preview = input.closest('form')?.querySelector('[data-image-preview]');
