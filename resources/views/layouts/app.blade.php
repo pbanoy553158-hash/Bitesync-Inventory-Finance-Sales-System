@@ -688,6 +688,85 @@ body {
 }
 
 
+.logout-confirmation {
+    width: min(420px, calc(100% - 32px));
+    max-width: none;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #e4dcd4;
+    border-radius: 14px;
+    background: white;
+    color: var(--text);
+    box-shadow: 0 24px 70px rgba(36, 26, 20, 0.25);
+}
+
+.logout-confirmation::backdrop {
+    background: rgba(24, 18, 14, 0.58);
+    backdrop-filter: blur(2px);
+}
+
+.logout-confirmation-content {
+    padding: 25px;
+}
+
+.logout-confirmation-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    background: #fbf1e3;
+    color: #a85f28;
+    font-size: 20px;
+}
+
+.logout-confirmation h2 {
+    margin: 0;
+    color: var(--dark);
+    font-size: 19px;
+    line-height: 1.3;
+}
+
+.logout-confirmation p {
+    margin: 8px 0 22px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.logout-confirmation-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+}
+
+.logout-confirmation-actions button {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: white;
+    color: var(--dark-soft);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.logout-confirmation-actions button:focus-visible {
+    outline: 3px solid rgba(196, 122, 58, 0.3);
+    outline-offset: 2px;
+}
+
+.logout-confirm-button {
+    border-color: var(--orange-dark) !important;
+    background: var(--orange-dark) !important;
+    color: white !important;
+}
+
+
 /* =========================================================
    MAIN
 ========================================================= */
@@ -1743,6 +1822,18 @@ label {
 
 </aside>
 
+<dialog class="logout-confirmation" data-logout-dialog aria-labelledby="logout-confirmation-title" aria-describedby="logout-confirmation-message">
+    <div class="logout-confirmation-content">
+        <div class="logout-confirmation-icon" aria-hidden="true">↪</div>
+        <h2 id="logout-confirmation-title">Sign out?</h2>
+        <p id="logout-confirmation-message">Are you sure you want to log out of your account?</p>
+        <div class="logout-confirmation-actions">
+            <button type="button" data-logout-cancel>Cancel</button>
+            <button type="button" class="logout-confirm-button" data-logout-confirm>Yes, log out</button>
+        </div>
+    </div>
+</dialog>
+
 <div class="sidebar-backdrop" data-sidebar-backdrop></div>
 
 
@@ -1781,6 +1872,23 @@ label {
 
 <script>
     (() => {
+        const logoutForm = document.querySelector('.logout-form');
+        const logoutDialog = document.querySelector('[data-logout-dialog]');
+        const logoutCancel = document.querySelector('[data-logout-cancel]');
+        const logoutConfirm = document.querySelector('[data-logout-confirm]');
+
+        if (logoutForm && logoutDialog && logoutCancel && logoutConfirm) {
+            logoutForm.addEventListener('submit', (event) => {
+                if (!logoutDialog.open) {
+                    event.preventDefault();
+                    logoutDialog.showModal();
+                }
+            });
+
+            logoutCancel.addEventListener('click', () => logoutDialog.close());
+            logoutConfirm.addEventListener('click', () => logoutForm.submit());
+        }
+
         const sidebar = document.querySelector('.sidebar');
         const toggle = document.querySelector('[data-sidebar-toggle]');
         const backdrop = document.querySelector('[data-sidebar-backdrop]');
