@@ -47,6 +47,30 @@ class AuditLogsTest extends TestCase
         $response->assertSee('admin.settings.update');
     }
 
+    public function test_audit_logs_page_renders_pagination_wrapper(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'CEO/Admin',
+        ]);
+
+        for ($i = 0; $i < 31; $i++) {
+            AuditLog::create([
+                'user_id' => $admin->id,
+                'action' => 'System Check ' . $i,
+                'route_name' => 'system.check.' . $i,
+                'subject_type' => 'SystemCheck',
+                'subject_id' => $i + 1,
+                'status_code' => 200,
+                'ip_address' => '127.0.0.1',
+            ]);
+        }
+
+        $this->actingAs($admin)
+            ->get(route('admin.audit-logs.index'))
+            ->assertOk()
+            ->assertSee('audit-pagination-wrapper');
+    }
+
     public function test_non_admin_cannot_access_audit_logs(): void
     {
         $financeUser = User::factory()->create([

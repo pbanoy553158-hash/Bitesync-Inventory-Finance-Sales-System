@@ -91,7 +91,9 @@
         </div>
 
         @if ($auditLogs->hasPages())
-            <div class="audit-pagination">{{ $auditLogs->links() }}</div>
+            <div class="audit-pagination-wrapper">
+                {{ $auditLogs->links() }}
+            </div>
         @endif
     </section>
 </div>
@@ -285,8 +287,85 @@
     text-align: center;
 }
 
-.audit-pagination {
+.audit-pagination-wrapper {
     padding: 13px 16px;
+    border-top: 1px solid #eee7e0;
+}
+
+.audit-pagination-wrapper nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.audit-pagination-wrapper nav > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+}
+
+.audit-pagination-wrapper nav > div > div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.audit-pagination-wrapper nav a,
+.audit-pagination-wrapper nav button,
+.audit-pagination-wrapper nav span[aria-current="page"],
+.audit-pagination-wrapper nav span[aria-disabled="true"] {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd4ca;
+    border-radius: 7px;
+    background: white;
+    color: #766d67;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.audit-pagination-wrapper nav a:hover {
+    border-color: #d5a77d;
+    background: #faf7f3;
+    color: #a85f28;
+}
+
+.audit-pagination-wrapper nav span[aria-current="page"] {
+    border-color: #a85f28;
+    background: #a85f28;
+    color: white;
+}
+
+.audit-pagination-wrapper nav span[aria-current="page"] > span {
+    color: white;
+}
+
+.audit-pagination-wrapper nav span[aria-disabled="true"] {
+    color: #b8b0aa;
+    background: #faf9f7;
+    cursor: default;
+}
+
+.audit-pagination-wrapper nav svg {
+    width: 13px;
+    height: 13px;
+}
+
+.audit-pagination-wrapper nav p {
+    margin: 0;
+    color: #81776f;
+    font-size: 11px;
+    line-height: 1.4;
 }
 
 @media (max-width: 700px) {
