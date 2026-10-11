@@ -451,10 +451,10 @@
 
                             <div class="inventory-item-image">
 
-                                @if ($item->image)
+                                @if ($item->image_url)
 
                                     <img
-                                        src="{{ asset('storage/' . $item->image) }}"
+                                        src="{{ $item->image_url }}"
                                         alt="{{ $item->name }}"
                                     >
 

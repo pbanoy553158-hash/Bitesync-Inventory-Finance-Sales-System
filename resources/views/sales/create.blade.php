@@ -31,9 +31,7 @@ $productData = $products->map(function ($product) {
         'sku' => $product->sku,
         'selling_price' => (float) $product->selling_price,
         'category' => optional($product->category)->name,
-        'image' => $product->image
-            ? asset('storage/' . $product->image)
-            : null,
+        'image' => $product->image_url,
         'has_recipe' => $product->recipe !== null,
     ];
 })->values()->all();
@@ -337,10 +335,10 @@ $oldSaleItemsJson = json_encode(
 
                             <div class="sales-product-image">
 
-                                @if ($product->image)
+                                @if ($product->image_url)
 
                                     <img
-                                        src="{{ asset('storage/' . $product->image) }}"
+                                        src="{{ $product->image_url }}"
                                         alt="{{ $product->name }}"
                                         loading="lazy"
                                     >

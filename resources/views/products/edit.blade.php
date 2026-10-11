@@ -109,6 +109,7 @@
     <form
         method="POST"
         action="{{ route('products.update', $product) }}"
+        enctype="multipart/form-data"
     >
 
         @csrf
@@ -332,6 +333,27 @@
 
         </div>
 
+        <div class="product-image-edit-card">
+            <div class="product-image-edit">
+                <label for="image">Product Photo</label>
+                <div class="image-upload-preview" data-image-preview>
+                    @if ($product->image_url)
+                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                    @else
+                        <div class="image-upload-placeholder">No product photo</div>
+                    @endif
+                </div>
+                <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                    class="image-upload-input"
+                >
+                <span class="image-upload-help">Choose a JPG, PNG, or WEBP image (maximum 2 MB). Leave empty to keep the current photo.</span>
+            </div>
+        </div>
+
 
         <!-- =====================================================
              PRODUCT / INVENTORY NOTE
@@ -413,6 +435,29 @@
     margin: 0 auto;
 
     padding-bottom: 30px;
+}
+
+.product-image-edit {
+    display: grid;
+    gap: 8px;
+    color: var(--dark-soft);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.product-image-edit-card {
+    margin-top: 17px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--card);
+}
+
+.product-image-edit input[type="file"] {
+    max-width: 100%;
+    color: var(--muted);
+    font: inherit;
+    font-weight: 400;
 }
 
 

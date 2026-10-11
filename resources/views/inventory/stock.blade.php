@@ -1392,10 +1392,10 @@ ITEM SUMMARY
 
     <div class="item-image">
 
-        @if(!empty($inventoryItem->image))
+        @if($inventoryItem->image_url)
 
             <img
-                src="{{ asset('storage/' . $inventoryItem->image) }}"
+                src="{{ $inventoryItem->image_url }}"
                 alt="{{ $inventoryItem->name }}"
             >
 

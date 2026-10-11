@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -36,6 +37,15 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image || !Storage::disk('public')->exists($this->image)) {
+            return null;
+        }
+
+        return url('storage/' . $this->image);
     }
 
     /**

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-theme="{{ old('appearance_theme', auth()->user()?->appearance_theme ?? 'light') }}" data-text-size="{{ old('text_size', auth()->user()?->text_size ?? 'medium') }}">
 
 <head>
 
@@ -687,83 +687,45 @@ body {
     color: white;
 }
 
-
-.logout-confirmation {
-    width: min(420px, calc(100% - 32px));
-    max-width: none;
-    margin: auto;
-    padding: 0;
-    border: 1px solid #e4dcd4;
-    border-radius: 14px;
-    background: white;
-    color: var(--text);
-    box-shadow: 0 24px 70px rgba(36, 26, 20, 0.25);
-}
-
-.logout-confirmation::backdrop {
-    background: rgba(24, 18, 14, 0.58);
-    backdrop-filter: blur(2px);
-}
-
-.logout-confirmation-content {
-    padding: 25px;
-}
-
-.logout-confirmation-icon {
-    width: 42px;
-    height: 42px;
+.image-upload-preview {
+    width: min(100%, 220px);
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 16px;
-    border-radius: 12px;
-    background: #fbf1e3;
-    color: #a85f28;
-    font-size: 20px;
+    overflow: hidden;
+    border: 1px dashed #cbbcaf;
+    border-radius: 9px;
+    background: #faf7f3;
 }
 
-.logout-confirmation h2 {
-    margin: 0;
-    color: var(--dark);
-    font-size: 19px;
-    line-height: 1.3;
+.image-upload-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-.logout-confirmation p {
-    margin: 8px 0 22px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.logout-confirmation-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 9px;
-}
-
-.logout-confirmation-actions button {
-    min-height: 38px;
-    padding: 0 14px;
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    background: white;
-    color: var(--dark-soft);
-    font: inherit;
+.image-upload-placeholder {
+    color: #8b8179;
     font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
 }
 
-.logout-confirmation-actions button:focus-visible {
-    outline: 3px solid rgba(196, 122, 58, 0.3);
-    outline-offset: 2px;
+.image-upload-help {
+    display: block;
+    margin-top: 4px;
+    color: #81776f;
+    font-size: 11px;
+    font-weight: 400;
 }
 
-.logout-confirm-button {
-    border-color: var(--orange-dark) !important;
-    background: var(--orange-dark) !important;
-    color: white !important;
+html[data-theme="dark"] .image-upload-preview {
+    border-color: #59636e;
+    background: #191e24;
+}
+
+html[data-theme="dark"] .image-upload-placeholder,
+html[data-theme="dark"] .image-upload-help {
+    color: #aab3bd;
 }
 
 
@@ -1229,6 +1191,110 @@ label {
         font-size: 0.75rem;
     }
 
+}
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #15191e;
+    --card: #20262d;
+    --card-soft: #252c34;
+    --dark: #f1f3f5;
+    --dark-soft: #e1e5e9;
+    --brown: #c6a78f;
+    --orange-light: #493626;
+    --text: #e1e5e9;
+    --muted: #aab3bd;
+    --border: #39424c;
+    --green-light: #263c30;
+    --red-light: #442d2c;
+    --yellow-light: #443a29;
+    --blue-light: #2b3744;
+}
+
+html[data-text-size="small"] {
+    font-size: 14px;
+}
+
+html[data-text-size="medium"] {
+    font-size: 16px;
+}
+
+html[data-text-size="large"] {
+    font-size: 18px;
+}
+
+html[data-theme="dark"] body,
+html[data-theme="dark"] .main {
+    background: var(--bg);
+    color: var(--text);
+}
+
+html[data-theme="dark"] .main [class*="panel"],
+html[data-theme="dark"] .main [class*="card"],
+html[data-theme="dark"] .main [class*="box"],
+html[data-theme="dark"] .main [class*="section"],
+html[data-theme="dark"] .main [class*="filters"],
+html[data-theme="dark"] .main [class*="table-wrap"],
+html[data-theme="dark"] .main [class*="table-wrapper"],
+html[data-theme="dark"] .main [class*="table-container"],
+html[data-theme="dark"] .main [class$="-stat"]:not([class*="status"]) {
+    border-color: var(--border) !important;
+    background-color: var(--card) !important;
+    color: var(--text);
+}
+
+html[data-theme="dark"] .main h1,
+html[data-theme="dark"] .main h2,
+html[data-theme="dark"] .main h3,
+html[data-theme="dark"] .main h4,
+html[data-theme="dark"] .main p,
+html[data-theme="dark"] .main label,
+html[data-theme="dark"] .main td,
+html[data-theme="dark"] .main th,
+html[data-theme="dark"] .main small,
+html[data-theme="dark"] .main strong {
+    color: var(--text);
+}
+
+html[data-theme="dark"] .main [class*="title"],
+html[data-theme="dark"] .main [class*="label"]:not([class*="status"]),
+html[data-theme="dark"] .main [class*="description"],
+html[data-theme="dark"] .main [class*="subtitle"],
+html[data-theme="dark"] .main [class*="name"]:not([class*="status"]),
+html[data-theme="dark"] .main [class*="count"],
+html[data-theme="dark"] .main [class*="text"] {
+    color: var(--text);
+}
+
+html[data-theme="dark"] .main a:not([class*="button"]):not([class*="badge"]) {
+    color: #e1a66f;
+}
+
+html[data-theme="dark"] .main table,
+html[data-theme="dark"] .main tbody,
+html[data-theme="dark"] .main tr,
+html[data-theme="dark"] .main td {
+    background-color: var(--card) !important;
+}
+
+html[data-theme="dark"] .main thead th,
+html[data-theme="dark"] .main table th {
+    border-color: var(--border) !important;
+    background-color: var(--card-soft) !important;
+}
+
+html[data-theme="dark"] .main input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="dark"] .main select,
+html[data-theme="dark"] .main textarea {
+    border-color: var(--border) !important;
+    background-color: #191e24 !important;
+    color: var(--text) !important;
+    color-scheme: dark;
+}
+
+html[data-theme="dark"] .main input::placeholder,
+html[data-theme="dark"] .main textarea::placeholder {
+    color: #909ba6;
 }
 
 </style>
@@ -1822,18 +1888,6 @@ label {
 
 </aside>
 
-<dialog class="logout-confirmation" data-logout-dialog aria-labelledby="logout-confirmation-title" aria-describedby="logout-confirmation-message">
-    <div class="logout-confirmation-content">
-        <div class="logout-confirmation-icon" aria-hidden="true">↪</div>
-        <h2 id="logout-confirmation-title">Sign out?</h2>
-        <p id="logout-confirmation-message">Are you sure you want to log out of your account?</p>
-        <div class="logout-confirmation-actions">
-            <button type="button" data-logout-cancel>Cancel</button>
-            <button type="button" class="logout-confirm-button" data-logout-confirm>Yes, log out</button>
-        </div>
-    </div>
-</dialog>
-
 <div class="sidebar-backdrop" data-sidebar-backdrop></div>
 
 
@@ -1872,22 +1926,24 @@ label {
 
 <script>
     (() => {
-        const logoutForm = document.querySelector('.logout-form');
-        const logoutDialog = document.querySelector('[data-logout-dialog]');
-        const logoutCancel = document.querySelector('[data-logout-cancel]');
-        const logoutConfirm = document.querySelector('[data-logout-confirm]');
+        document.querySelectorAll('.image-upload-input').forEach((input) => {
+            input.addEventListener('change', () => {
+                const preview = input.closest('form')?.querySelector('[data-image-preview]');
+                const file = input.files?.[0];
+                if (!preview || !file) return;
 
-        if (logoutForm && logoutDialog && logoutCancel && logoutConfirm) {
-            logoutForm.addEventListener('submit', (event) => {
-                if (!logoutDialog.open) {
-                    event.preventDefault();
-                    logoutDialog.showModal();
+                const previousImage = preview.querySelector('img');
+                if (previousImage?.dataset.previewUrl) {
+                    URL.revokeObjectURL(previousImage.dataset.previewUrl);
                 }
-            });
 
-            logoutCancel.addEventListener('click', () => logoutDialog.close());
-            logoutConfirm.addEventListener('click', () => logoutForm.submit());
-        }
+                const image = document.createElement('img');
+                image.dataset.previewUrl = URL.createObjectURL(file);
+                image.src = image.dataset.previewUrl;
+                image.alt = 'Selected item photo preview';
+                preview.replaceChildren(image);
+            });
+        });
 
         const sidebar = document.querySelector('.sidebar');
         const toggle = document.querySelector('[data-sidebar-toggle]');

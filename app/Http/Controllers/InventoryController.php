@@ -18,6 +18,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -311,11 +312,24 @@ class InventoryController extends Controller
                 'nullable',
                 'string',
             ],
+
+            'image' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:2048',
+            ],
         ]);
+
+        $imagePath = $request->file('image')?->store(
+            'inventory-items',
+            'public'
+        );
 
         DB::transaction(function () use (
             $validated,
-            $user
+            $user,
+            $imagePath
         ) {
             $initialQuantity =
                 (float) $validated['quantity'];
@@ -350,6 +364,9 @@ class InventoryController extends Controller
 
                 'description' =>
                     $validated['description'] ?? null,
+
+                'image' =>
+                    $imagePath,
 
                 'is_active' =>
                     true,
@@ -563,11 +580,24 @@ class InventoryController extends Controller
                 'string',
             ],
 
+            'image' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:2048',
+            ],
+
             'is_active' => [
                 'required',
                 'boolean',
             ],
         ]);
+
+        $previousImage = $inventoryItem->image;
+        $imagePath = $request->file('image')?->store(
+            'inventory-items',
+            'public'
+        );
 
         $inventoryItem->update([
             'category_id' =>
@@ -597,9 +627,16 @@ class InventoryController extends Controller
             'description' =>
                 $validated['description'] ?? null,
 
+            'image' =>
+                $imagePath ?? $previousImage,
+
             'is_active' =>
                 $validated['is_active'],
         ]);
+
+        if ($imagePath && $previousImage) {
+            Storage::disk('public')->delete($previousImage);
+        }
 
         return redirect()
             ->route('inventory.index')

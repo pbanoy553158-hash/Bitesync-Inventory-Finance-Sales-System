@@ -110,6 +110,7 @@
             method="POST"
             action="{{ route('inventory.update', $inventoryItem) }}"
             class="inventory-form"
+            enctype="multipart/form-data"
         >
 
             @csrf
@@ -560,6 +561,25 @@
                             placeholder="Enter additional information about this inventory item..."
                         >{{ old('description', $inventoryItem->description) }}</textarea>
 
+                    </div>
+
+                    <div class="form-group item-image-upload">
+                        <label for="image">Item Photo</label>
+                        <div class="image-upload-preview" data-image-preview>
+                            @if ($inventoryItem->image_url)
+                                <img src="{{ $inventoryItem->image_url }}" alt="{{ $inventoryItem->name }}">
+                            @else
+                                <div class="image-upload-placeholder">Photo preview</div>
+                            @endif
+                        </div>
+                        <input
+                            type="file"
+                            id="image"
+                            name="image"
+                            accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                            class="image-upload-input"
+                        >
+                        <span class="image-upload-help">JPG, PNG, or WEBP. Maximum 2 MB.</span>
                     </div>
 
                 </div>

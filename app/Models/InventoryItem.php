@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class InventoryItem extends Model
 {
@@ -22,6 +23,7 @@ class InventoryItem extends Model
         'unit_cost',
         'location',
         'description',
+        'image',
         'is_active',
     ];
 
@@ -41,6 +43,15 @@ class InventoryItem extends Model
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image || !Storage::disk('public')->exists($this->image)) {
+            return null;
+        }
+
+        return url('storage/' . $this->image);
     }
 
     public function stockMovements(): HasMany

@@ -461,28 +461,8 @@ class ProductController extends Controller
             'is_active' => $validated['is_active'],
         ];
 
-        /*
-        |--------------------------------------------------------------------------
-        | Replace Product Image
-        |--------------------------------------------------------------------------
-        */
-
+        $previousImage = $product->image;
         if ($request->hasFile('image')) {
-
-            /*
-            | Delete previous image.
-            */
-
-            if (!empty($product->image)) {
-                Storage::disk('public')->delete(
-                    $product->image
-                );
-            }
-
-            /*
-            | Store new image.
-            */
-
             $productData['image'] = $request
                 ->file('image')
                 ->store(
@@ -498,6 +478,10 @@ class ProductController extends Controller
         */
 
         $product->update($productData);
+
+        if ($request->hasFile('image') && $previousImage) {
+            Storage::disk('public')->delete($previousImage);
+        }
 
         /*
         |--------------------------------------------------------------------------

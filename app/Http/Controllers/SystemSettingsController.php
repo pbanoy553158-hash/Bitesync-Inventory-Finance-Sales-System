@@ -14,8 +14,12 @@ class SystemSettingsController extends Controller
 {
     public function edit(SystemSettings $systemSettings): View
     {
+        $settings = $systemSettings->all();
+        $settings['appearance_theme'] = auth()->user()->appearance_theme;
+        $settings['text_size'] = auth()->user()->text_size;
+
         return view('admin.settings', [
-            'settings' => $systemSettings->all(),
+            'settings' => $settings,
             'currencies' => SystemSettings::CURRENCIES,
             'timezones' => SystemSettings::TIMEZONES,
             'pendingUserCount' => User::query()
@@ -42,6 +46,8 @@ class SystemSettingsController extends Controller
                 Rule::in(array_keys(SystemSettings::TIMEZONES)),
             ],
             'locale' => ['required', Rule::in(['en', 'en_PH'])],
+            'appearance_theme' => ['required', Rule::in(['light', 'dark'])],
+            'text_size' => ['required', Rule::in(['small', 'medium', 'large'])],
             'default_minimum_stock' => [
                 'required',
                 'numeric',
@@ -50,7 +56,16 @@ class SystemSettingsController extends Controller
             ],
         ]);
 
-        DB::transaction(fn () => $systemSettings->update($validated));
+        $appearancePreferences = [
+            'appearance_theme' => $validated['appearance_theme'],
+            'text_size' => $validated['text_size'],
+        ];
+        unset($validated['appearance_theme'], $validated['text_size']);
+
+        DB::transaction(function () use ($request, $systemSettings, $validated, $appearancePreferences) {
+            $systemSettings->update($validated);
+            $request->user()->update($appearancePreferences);
+        });
 
         return redirect()
             ->route('admin.settings.edit')

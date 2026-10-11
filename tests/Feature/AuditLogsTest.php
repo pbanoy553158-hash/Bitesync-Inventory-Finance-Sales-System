@@ -25,6 +25,8 @@ class AuditLogsTest extends TestCase
             'currency_code' => 'PHP',
             'timezone' => 'UTC',
             'locale' => 'en',
+            'appearance_theme' => 'light',
+            'text_size' => 'medium',
             'default_minimum_stock' => 0,
         ])->assertRedirect(route('admin.settings.edit'));
 

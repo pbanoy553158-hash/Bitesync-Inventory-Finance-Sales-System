@@ -8,7 +8,7 @@
         <div>
             <div class="settings-eyebrow">Administration</div>
             <h1>System Settings</h1>
-            <p>Manage your business profile, regional preferences, and inventory defaults.</p>
+            <p>Manage your business profile, appearance, regional preferences, and inventory defaults.</p>
         </div>
     </header>
 
@@ -89,6 +89,48 @@
                     </select>
                 </label>
             </div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="appearance-heading">
+            <div class="settings-section-heading">
+                <div>
+                    <h2 id="appearance-heading">Appearance</h2>
+                    <p>Personalise how BiteSync looks for your account.</p>
+                </div>
+            </div>
+
+            <fieldset class="appearance-options">
+                <legend>Theme</legend>
+                <div class="appearance-choice-group" role="radiogroup" aria-label="Theme">
+                    <label class="appearance-choice">
+                        <input type="radio" name="appearance_theme" value="light" @checked(old('appearance_theme', $settings['appearance_theme']) === 'light')>
+                        <span aria-hidden="true">☀</span> Light
+                    </label>
+                    <label class="appearance-choice">
+                        <input type="radio" name="appearance_theme" value="dark" @checked(old('appearance_theme', $settings['appearance_theme']) === 'dark')>
+                        <span aria-hidden="true">☾</span> Dark
+                    </label>
+                </div>
+            </fieldset>
+
+            <fieldset class="appearance-options">
+                <legend>Text size</legend>
+                <div class="appearance-choice-group" role="radiogroup" aria-label="Text size">
+                    <label class="appearance-choice">
+                        <input type="radio" name="text_size" value="small" @checked(old('text_size', $settings['text_size']) === 'small')>
+                        <span class="appearance-size-small">A</span> Small
+                    </label>
+                    <label class="appearance-choice">
+                        <input type="radio" name="text_size" value="medium" @checked(old('text_size', $settings['text_size']) === 'medium')>
+                        <span>A</span> Default
+                    </label>
+                    <label class="appearance-choice">
+                        <input type="radio" name="text_size" value="large" @checked(old('text_size', $settings['text_size']) === 'large')>
+                        <span class="appearance-size-large">A</span> Large
+                    </label>
+                </div>
+            </fieldset>
+            <p class="appearance-hint">Changes preview instantly and are saved when you click Save Settings.</p>
         </section>
 
         <section class="settings-section" aria-labelledby="inventory-defaults-heading">
@@ -188,6 +230,82 @@
     margin: 0 0 4px;
     color: #34251d;
     font-size: 15px;
+}
+
+.appearance-options {
+    margin: 0 0 14px;
+    padding: 0;
+    border: 0;
+}
+
+.appearance-options legend {
+    margin-bottom: 7px;
+    color: #625951;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.appearance-choice-group {
+    width: fit-content;
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid #e4dcd4;
+    border-radius: 8px;
+    background: #f5f1eb;
+}
+
+.appearance-choice {
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 12px;
+    border-radius: 5px;
+    color: #625951;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.appearance-choice input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+}
+
+.appearance-choice:has(input:checked) {
+    background: #fff;
+    color: #34251d;
+    box-shadow: 0 1px 3px rgba(36, 26, 20, .12);
+}
+
+.appearance-choice:has(input:focus-visible) {
+    outline: 2px solid #a85f28;
+    outline-offset: 2px;
+}
+
+.appearance-choice span {
+    font-size: 14px;
+}
+
+.appearance-choice .appearance-size-small {
+    font-size: 11px;
+}
+
+.appearance-choice .appearance-size-large {
+    font-size: 17px;
+}
+
+.appearance-hint {
+    margin: 0;
+    color: #81776f;
+    font-size: 11px;
 }
 
 .settings-fields {
@@ -343,4 +461,25 @@
     }
 }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+    (() => {
+        const appearanceForm = document.querySelector('.settings-form');
+        if (!appearanceForm) return;
+
+        appearanceForm.querySelectorAll('input[name="appearance_theme"]').forEach((input) => {
+            input.addEventListener('change', () => {
+                document.documentElement.dataset.theme = input.value;
+            });
+        });
+
+        appearanceForm.querySelectorAll('input[name="text_size"]').forEach((input) => {
+            input.addEventListener('change', () => {
+                document.documentElement.dataset.textSize = input.value;
+            });
+        });
+    })();
+</script>
 @endpush

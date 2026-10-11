@@ -93,6 +93,7 @@
             method="POST"
             action="{{ route('inventory.store') }}"
             class="inventory-form"
+            enctype="multipart/form-data"
         >
 
             @csrf
@@ -513,6 +514,21 @@
                             placeholder="Enter additional information about this inventory item..."
                         >{{ old('description') }}</textarea>
 
+                    </div>
+
+                    <div class="form-group item-image-upload">
+                        <label for="image">Item Photo</label>
+                        <div class="image-upload-preview" data-image-preview>
+                            <div class="image-upload-placeholder">Photo preview</div>
+                        </div>
+                        <input
+                            type="file"
+                            id="image"
+                            name="image"
+                            accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                            class="image-upload-input"
+                        >
+                        <span class="image-upload-help">JPG, PNG, or WEBP. Maximum 2 MB.</span>
                     </div>
 
                 </div>

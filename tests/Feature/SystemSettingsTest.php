@@ -20,8 +20,14 @@ class SystemSettingsTest extends TestCase
         $response = $this->actingAs($admin)->get(route('admin.settings.edit'));
 
         $response->assertOk();
+        $response->assertSee('data-theme="light"', false);
+        $response->assertSee('data-text-size="medium"', false);
         $response->assertSee('Business Profile');
         $response->assertSee('Currency &amp; Locale', false);
+        $response->assertSee('Appearance');
+        $response->assertSee('Personalise how BiteSync looks for your account.');
+        $response->assertSee('name="appearance_theme" value="dark"', false);
+        $response->assertSee('name="text_size" value="large"', false);
         $response->assertSee('User Access');
     }
 
@@ -41,6 +47,8 @@ class SystemSettingsTest extends TestCase
                 'currency_code' => 'USD',
                 'timezone' => 'Asia/Manila',
                 'locale' => 'en_PH',
+                'appearance_theme' => 'dark',
+                'text_size' => 'large',
                 'default_minimum_stock' => '5.50',
             ]
         );
@@ -54,14 +62,31 @@ class SystemSettingsTest extends TestCase
             'key' => 'currency_code',
             'value' => 'USD',
         ]);
+        $this->assertDatabaseHas('users', [
+            'id' => $admin->id,
+            'appearance_theme' => 'dark',
+            'text_size' => 'large',
+        ]);
 
         $inventoryCreate = $this->get(route('inventory.create'));
 
         $inventoryCreate->assertOk();
+        $inventoryCreate->assertSee('data-theme="dark"', false);
+        $inventoryCreate->assertSee('data-text-size="large"', false);
         $inventoryCreate->assertSee('value="5.50"', false);
         $inventoryCreate->assertSee('$', false);
         $this->assertSame('Asia/Manila', config('app.timezone'));
         $this->assertSame('en_PH', app()->getLocale());
+
+        $anotherAdmin = User::factory()->create([
+            'role' => 'CEO/Admin',
+        ]);
+
+        $this->actingAs($anotherAdmin)
+            ->get(route('inventory.create'))
+            ->assertOk()
+            ->assertSee('data-theme="light"', false)
+            ->assertSee('data-text-size="medium"', false);
     }
 
     public function test_non_admin_cannot_view_system_settings(): void
