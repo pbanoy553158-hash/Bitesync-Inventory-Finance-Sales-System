@@ -202,7 +202,7 @@
 
     <div class="inventory-panel-actions">
 
-        @if($user->role === 'CEO/Admin')
+        @if($user->role === 'Procurement')
             <a
                 href="{{ route('inventory.index', ['operation' => 'physical-count']) }}"
                 class="inventory-count-button {{ request()->query('operation') === 'physical-count' ? 'active' : '' }}"
@@ -241,7 +241,7 @@
     class="inventory-filters"
 >
 
-    @if($user->role === 'CEO/Admin' && request()->query('operation') === 'physical-count')
+    @if(in_array($user->role, ['CEO/Admin', 'Procurement'], true) && request()->query('operation') === 'physical-count')
         <input type="hidden" name="operation" value="physical-count">
     @endif
 
@@ -302,7 +302,7 @@
     @if ($search || $status)
 
         <a
-            href="{{ route('inventory.index') }}"
+            href="{{ route('inventory.index', request()->query('operation') === 'physical-count' ? ['operation' => 'physical-count'] : []) }}"
             class="inventory-clear-button"
         >
             Clear
@@ -739,6 +739,14 @@
                                     >
                                         <span>↕</span>
                                         Stock Out
+                                    </a>
+                                @elseif (request()->query('operation') === 'physical-count')
+                                    <a
+                                        href="{{ route('inventory.stock', ['inventoryItem' => $item, 'operation' => 'physical-count']) }}#physical-count"
+                                        class="inventory-stock-button"
+                                    >
+                                        <span>±</span>
+                                        Physical Count
                                     </a>
                                 @endif
 

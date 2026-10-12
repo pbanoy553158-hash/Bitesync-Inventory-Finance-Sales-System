@@ -204,10 +204,28 @@ class ReportController extends Controller
 
         $html = '
 <!DOCTYPE html>
-<html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:x="urn:schemas-microsoft-com:office:excel">
 <head>
 
 <meta charset="UTF-8">
+
+<!--[if gte mso 9]>
+<xml>
+    <x:ExcelWorkbook>
+        <x:ExcelWorksheets>
+            <x:ExcelWorksheet>
+                <x:Name>BiteSync Report</x:Name>
+                <x:WorksheetOptions>
+                    <x:ProtectContents>True</x:ProtectContents>
+                    <x:ProtectObjects>True</x:ProtectObjects>
+                    <x:ProtectScenarios>True</x:ProtectScenarios>
+                </x:WorksheetOptions>
+            </x:ExcelWorksheet>
+        </x:ExcelWorksheets>
+    </x:ExcelWorkbook>
+</xml>
+<![endif]-->
 
 <style>
 

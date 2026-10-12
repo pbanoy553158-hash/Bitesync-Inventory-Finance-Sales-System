@@ -1670,6 +1670,16 @@ html[data-theme="dark"] .main textarea::placeholder {
                     >
                         Stock Out
                     </a>
+
+                    @if ($isAdmin || $isProcurement)
+                        <a
+                            href="{{ route('inventory.index', ['operation' => 'physical-count']) }}"
+                            class="nav-subitem {{ request()->query('operation') === 'physical-count' ? 'active' : '' }}"
+                            @if(request()->query('operation') === 'physical-count') aria-current="page" @endif
+                        >
+                            Physical Count
+                        </a>
+                    @endif
                 </div>
 
             </div>

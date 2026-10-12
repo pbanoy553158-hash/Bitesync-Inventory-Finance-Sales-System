@@ -132,7 +132,7 @@ class MultiItemStockOutTest extends TestCase
         $stockOutResponse->assertDontSee('stockReceiptForm');
     }
 
-    public function test_inventory_has_a_physical_count_shortcut_and_item_action(): void
+    public function test_admin_inventory_uses_the_physical_count_menu_and_item_action(): void
     {
         $user = User::factory()->create([
             'role' => 'CEO/Admin',
@@ -145,7 +145,7 @@ class MultiItemStockOutTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Physical Count');
-        $response->assertSee('inventory-count-button active');
+        $response->assertDontSee('class="inventory-count-button active"', false);
         $response->assertSee('aria-current="page"', false);
         $response->assertSee(route('inventory.stock', [
             'inventoryItem' => $inventoryItem,
@@ -198,6 +198,52 @@ class MultiItemStockOutTest extends TestCase
         $response->assertSee('Actual Physical Count');
         $response->assertDontSee('stockReceiptForm');
         $response->assertDontSee('stockOutForm');
+    }
+
+    public function test_procurement_can_access_and_record_physical_counts(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'Procurement',
+        ]);
+        $inventoryItem = $this->createInventoryItems([10])[0];
+
+        $inventoryResponse = $this->actingAs($user)->get(route('inventory.index', [
+            'operation' => 'physical-count',
+        ]));
+
+        $inventoryResponse->assertOk();
+        $inventoryResponse->assertSee('Physical Count');
+        $inventoryResponse->assertSee(route('inventory.stock', [
+            'inventoryItem' => $inventoryItem,
+            'operation' => 'physical-count',
+        ]), false);
+
+        $stockResponse = $this->get(route('inventory.stock', [
+            'inventoryItem' => $inventoryItem,
+            'operation' => 'physical-count',
+        ]));
+
+        $stockResponse->assertOk();
+        $stockResponse->assertSee('Actual Physical Count');
+
+        $adjustmentResponse = $this->post(route('inventory.adjust', [
+            'inventoryItem' => $inventoryItem,
+        ]), [
+            'quantity' => 8,
+            'reason' => 'Verified during the scheduled physical count.',
+        ]);
+
+        $adjustmentResponse->assertRedirect(route('inventory.stock', $inventoryItem));
+        $this->assertSame('8.00', $inventoryItem->fresh()->quantity);
+        $this->assertDatabaseHas('stock_movements', [
+            'inventory_item_id' => $inventoryItem->id,
+            'user_id' => $user->id,
+            'type' => 'adjustment',
+            'quantity' => -2,
+            'quantity_before' => 10,
+            'quantity_after' => 8,
+            'reference_type' => 'inventory_adjustment',
+        ]);
     }
 
     private function createInventoryItems(array $quantities): array

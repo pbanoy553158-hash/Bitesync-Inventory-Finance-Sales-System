@@ -2230,7 +2230,7 @@ class InventoryController extends Controller
      * PHYSICAL COUNT ADJUSTMENT
      * =============================================================
      *
-     * CEO/Admin ONLY.
+     * CEO/Admin and Procurement.
      */
     public function adjust(
         Request $request,
@@ -2238,10 +2238,10 @@ class InventoryController extends Controller
     ): RedirectResponse {
         $user = $request->user();
 
-        if ($user->role !== 'CEO/Admin') {
+        if (!in_array($user->role, ['CEO/Admin', 'Procurement'], true)) {
             abort(
                 403,
-                'Only CEO/Admin can perform physical inventory adjustments.'
+                'You are not authorized to perform physical inventory adjustments.'
             );
         }
 

@@ -1516,7 +1516,7 @@ CONTROLLED STOCK OPERATIONS
     $selectedStockOperation = request()->query('operation');
     $availableStockOperations = ['stock-in', 'stock-out'];
 
-    if ($user->role === 'CEO/Admin') {
+    if (in_array($user->role, ['CEO/Admin', 'Procurement'], true)) {
         $availableStockOperations[] = 'physical-count';
     }
 
@@ -2355,10 +2355,10 @@ CONTROLLED STOCK OPERATIONS
 
         {{-- =================================================
              PHYSICAL COUNT ADJUSTMENT
-             CEO/ADMIN ONLY
+             CEO/ADMIN AND PROCUREMENT
         ================================================== --}}
 
-        @if($user->role === 'CEO/Admin' && in_array($selectedStockOperation, [null, 'physical-count'], true))
+        @if(in_array($user->role, ['CEO/Admin', 'Procurement'], true) && in_array($selectedStockOperation, [null, 'physical-count'], true))
 
             <div id="physical-count" class="operation-card adjustment-card">
 
