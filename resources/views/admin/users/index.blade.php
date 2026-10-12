@@ -53,7 +53,12 @@
                             </button>
                         </form>
 
-                        <form method="POST" action="{{ route('admin.users.decline', $pendingUser) }}" onsubmit="return confirm('Decline this account?');">
+                        <form
+                            method="POST"
+                            action="{{ route('admin.users.decline', $pendingUser) }}"
+                            data-decline-form
+                            data-confirm-message="Are you sure you want to decline the account for {{ $pendingUser->name }}? This user will no longer be able to sign in to BiteSync."
+                        >
                             @csrf
                             <button type="submit" style="min-height: 40px; padding: 0 14px; border: 1px solid #d9b9b5; border-radius: 8px; background: #fff; color: #a43f36; cursor: pointer; font-weight: 700;">
                                 Decline
@@ -68,4 +73,71 @@
             @endforelse
         </section>
     </div>
+
+    <dialog
+        class="logout-confirmation"
+        data-decline-dialog
+        aria-labelledby="decline-confirmation-title"
+        aria-describedby="decline-confirmation-message"
+    >
+        <div class="logout-confirmation-content">
+            <div class="logout-confirmation-icon" aria-hidden="true">!</div>
+            <h2 id="decline-confirmation-title">Decline account?</h2>
+            <p id="decline-confirmation-message">Are you sure you want to decline this account?</p>
+            <div class="logout-confirmation-actions">
+                <button type="button" data-decline-cancel>Cancel</button>
+                <button type="button" class="logout-confirm-button" data-decline-confirm>Yes, decline</button>
+            </div>
+        </div>
+    </dialog>
+
+    @push('scripts')
+        <script>
+            (() => {
+                const dialog = document.querySelector('[data-decline-dialog]');
+                const message = document.querySelector('#decline-confirmation-message');
+                const cancelButton = document.querySelector('[data-decline-cancel]');
+                const confirmButton = document.querySelector('[data-decline-confirm]');
+                let pendingForm = null;
+                let confirmedForm = null;
+
+                if (!dialog || !message || !cancelButton || !confirmButton) return;
+
+                document.querySelectorAll('[data-decline-form]').forEach((form) => {
+                    form.addEventListener('submit', (event) => {
+                        if (confirmedForm === form) {
+                            confirmedForm = null;
+                            return;
+                        }
+
+                        event.preventDefault();
+                        pendingForm = form;
+                        message.textContent = form.dataset.confirmMessage;
+                        dialog.showModal();
+                        cancelButton.focus();
+                    });
+                });
+
+                cancelButton.addEventListener('click', () => {
+                    pendingForm = null;
+                    dialog.close();
+                });
+
+                confirmButton.addEventListener('click', () => {
+                    const form = pendingForm;
+                    pendingForm = null;
+                    dialog.close();
+
+                    if (form) {
+                        confirmedForm = form;
+                        form.requestSubmit();
+                    }
+                });
+
+                dialog.addEventListener('close', () => {
+                    pendingForm = null;
+                });
+            })();
+        </script>
+    @endpush
 @endsection

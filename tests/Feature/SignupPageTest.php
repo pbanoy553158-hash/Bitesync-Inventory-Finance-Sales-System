@@ -146,7 +146,18 @@ class SignupPageTest extends TestCase
             ->get(route('admin.users.index'))
             ->assertOk()
             ->assertSee('Decline')
-            ->assertSee(route('admin.users.decline', $pendingUser));
+            ->assertSee(route('admin.users.decline', $pendingUser))
+            ->assertSee('class="logout-confirmation"', false)
+            ->assertSee('data-decline-dialog', false)
+            ->assertSee('data-decline-form', false)
+            ->assertSee('dialog.showModal()', false)
+            ->assertSee('Yes, decline')
+            ->assertSee(
+                'data-confirm-message="Are you sure you want to decline the account for '
+                    .e($pendingUser->name)
+                    .'? This user will no longer be able to sign in to BiteSync."',
+                false
+            );
     }
 
     public function test_signup_rejects_invalid_or_duplicate_accounts(): void
